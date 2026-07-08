@@ -39,14 +39,18 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.privacyshield.monitor.R
+import com.privacyshield.monitor.core.model.SpecialAccessApp
+import com.privacyshield.monitor.core.model.SpecialAccessType
 import com.privacyshield.monitor.core.model.TrackedPermission
 import com.privacyshield.monitor.ui.components.AppIcon
 import com.privacyshield.monitor.ui.components.SectionCard
+import com.privacyshield.monitor.ui.theme.RiskRed
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PermissionsScreen(vm: PermissionsViewModel) {
     val groups by vm.groups.collectAsStateWithLifecycle()
+    val specialAccess by vm.specialAccess.collectAsStateWithLifecycle()
     val loading by vm.loading.collectAsStateWithLifecycle()
 
     LaunchedEffect(Unit) { vm.refresh(includeSystem = false) }
@@ -66,6 +70,9 @@ fun PermissionsScreen(vm: PermissionsViewModel) {
                 verticalArrangement = Arrangement.spacedBy(12.dp),
             ) {
                 item {
+                    SpecialAccessCard(specialAccess)
+                }
+                item {
                     Text(
                         stringResource(R.string.permissions_subtitle),
                         style = MaterialTheme.typography.bodyMedium,
@@ -81,6 +88,75 @@ fun PermissionsScreen(vm: PermissionsViewModel) {
         }
     }
 }
+
+@Composable
+private fun SpecialAccessCard(apps: List<SpecialAccessApp>) {
+    val context = LocalContext.current
+    SectionCard(title = stringResource(R.string.permissions_special_title)) {
+        Text(
+            stringResource(R.string.permissions_special_subtitle),
+            style = MaterialTheme.typography.bodySmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+        )
+        Spacer(Modifier.size(8.dp))
+        if (apps.isEmpty()) {
+            Text(stringResource(R.string.sa_none), style = MaterialTheme.typography.bodyMedium)
+        } else {
+            Column {
+                apps.forEach { sa ->
+                    Row(
+                        Modifier
+                            .fillMaxWidth()
+                            .clickable {
+                                context.startActivity(
+                                    Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
+                                        data = Uri.fromParts("package", sa.packageName, null)
+                                        addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                                    },
+                                )
+                            }
+                            .padding(vertical = 8.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                    ) {
+                        AppIcon(sa.packageName, Modifier.size(36.dp))
+                        Spacer(Modifier.size(12.dp))
+                        Column(Modifier.weight(1f)) {
+                            Text(sa.label, fontWeight = FontWeight.SemiBold, maxLines = 1)
+                            Text(
+                                specialAccessRisk(sa.type),
+                                style = MaterialTheme.typography.bodySmall,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            )
+                        }
+                        Text(
+                            specialAccessLabel(sa.type),
+                            style = MaterialTheme.typography.labelMedium,
+                            color = RiskRed,
+                        )
+                    }
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun specialAccessLabel(type: SpecialAccessType): String = stringResource(
+    when (type) {
+        SpecialAccessType.ACCESSIBILITY -> R.string.sa_accessibility
+        SpecialAccessType.NOTIFICATION_LISTENER -> R.string.sa_notification_listener
+        SpecialAccessType.DEVICE_ADMIN -> R.string.sa_device_admin
+    },
+)
+
+@Composable
+private fun specialAccessRisk(type: SpecialAccessType): String = stringResource(
+    when (type) {
+        SpecialAccessType.ACCESSIBILITY -> R.string.sa_accessibility_risk
+        SpecialAccessType.NOTIFICATION_LISTENER -> R.string.sa_notification_risk
+        SpecialAccessType.DEVICE_ADMIN -> R.string.sa_device_admin_risk
+    },
+)
 
 @Composable
 private fun PermissionGroupCard(group: PermissionGroup) {

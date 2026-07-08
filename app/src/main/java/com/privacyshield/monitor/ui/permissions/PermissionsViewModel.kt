@@ -4,8 +4,10 @@ import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.privacyshield.monitor.core.model.SpecialAccessApp
 import com.privacyshield.monitor.core.model.TrackedPermission
 import com.privacyshield.monitor.di.AppContainer
+import com.privacyshield.monitor.monitor.SpecialAccessScanner
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -36,12 +38,19 @@ class PermissionsViewModel(private val container: AppContainer) : ViewModel() {
     private val _groups = MutableStateFlow<List<PermissionGroup>>(emptyList())
     val groups: StateFlow<List<PermissionGroup>> = _groups.asStateFlow()
 
+    private val _specialAccess = MutableStateFlow<List<SpecialAccessApp>>(emptyList())
+    val specialAccess: StateFlow<List<SpecialAccessApp>> = _specialAccess.asStateFlow()
+
     private val _loading = MutableStateFlow(true)
     val loading: StateFlow<Boolean> = _loading.asStateFlow()
 
     fun refresh(includeSystem: Boolean) {
         viewModelScope.launch {
             _loading.value = true
+            val special = withContext(Dispatchers.IO) {
+                SpecialAccessScanner(container.appContext, container.appRepository).scan()
+            }
+            _specialAccess.value = special
             _groups.value = withContext(Dispatchers.IO) { buildGroups(includeSystem) }
             _loading.value = false
         }

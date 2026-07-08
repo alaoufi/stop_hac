@@ -38,6 +38,7 @@ class MonitorService : LifecycleService() {
     private val analyzer = RiskAnalyzer()
     private val callbackExecutor = Executors.newSingleThreadExecutor()
     private lateinit var overlay: OverlayIndicator
+    private var installReceiver: InstallReceiver? = null
 
     override fun onCreate() {
         super.onCreate()
@@ -47,6 +48,22 @@ class MonitorService : LifecycleService() {
         deviceState = DeviceState(this)
         overlay = OverlayIndicator(this)
         observeOverlay()
+        registerInstallReceiver()
+    }
+
+    /** Watches for newly installed / removed apps while the service is alive. */
+    private fun registerInstallReceiver() {
+        val receiver = InstallReceiver()
+        val filter = android.content.IntentFilter().apply {
+            addAction(Intent.ACTION_PACKAGE_ADDED)
+            addAction(Intent.ACTION_PACKAGE_REMOVED)
+            addDataScheme("package")
+        }
+        androidx.core.content.ContextCompat.registerReceiver(
+            this, receiver, filter,
+            androidx.core.content.ContextCompat.RECEIVER_EXPORTED,
+        )
+        installReceiver = receiver
     }
 
     /** Drives the floating privacy dot from live sensor state + the user's toggle. */
@@ -219,6 +236,8 @@ class MonitorService : LifecycleService() {
     override fun onDestroy() {
         detector.stop()
         overlay.hide()
+        installReceiver?.let { runCatching { unregisterReceiver(it) } }
+        installReceiver = null
         callbackExecutor.shutdown()
         MonitorState.setRunning(false)
         super.onDestroy()

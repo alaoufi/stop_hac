@@ -8,6 +8,7 @@ import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
 import androidx.work.WorkerParameters
 import com.privacyshield.monitor.PrivacyMonitorApp
+import com.privacyshield.monitor.R
 import com.privacyshield.monitor.notify.Notifier
 import kotlinx.coroutines.flow.first
 import java.util.concurrent.TimeUnit
@@ -59,10 +60,44 @@ class PeriodicScanWorker(
             )
         }
 
-        // 2. Retention.
+        // 2. Special-access diff (accessibility / notification listeners / admins).
+        scanSpecialAccess(notifier)
+
+        // 3. Retention.
         container.eventRepository.applyRetention(settings.retentionDays, now)
 
         return Result.success()
+    }
+
+    /** Detects newly granted high-power access since the last scan and alerts. */
+    private fun scanSpecialAccess(notifier: Notifier) {
+        val app = applicationContext as PrivacyMonitorApp
+        val scanner = SpecialAccessScanner(applicationContext, app.container.appRepository)
+        val current = scanner.scan()
+        val currentKeys = current.map { "${it.type.name}:${it.packageName}" }.toSet()
+
+        val prefs = applicationContext.getSharedPreferences("special_access_snapshot", android.content.Context.MODE_PRIVATE)
+        val previous = prefs.getStringSet("set", null)
+
+        if (previous != null) {
+            current.filter { "${it.type.name}:${it.packageName}" !in previous }.forEach { sa ->
+                val typeName = applicationContext.getString(
+                    when (sa.type) {
+                        com.privacyshield.monitor.core.model.SpecialAccessType.ACCESSIBILITY -> R.string.sa_accessibility
+                        com.privacyshield.monitor.core.model.SpecialAccessType.NOTIFICATION_LISTENER -> R.string.sa_notification_listener
+                        com.privacyshield.monitor.core.model.SpecialAccessType.DEVICE_ADMIN -> R.string.sa_device_admin
+                    },
+                )
+                notifier.notifyGeneric(
+                    notificationId = 4000 + (sa.packageName.hashCode() and 0x3FF),
+                    title = applicationContext.getString(R.string.sa_new_alert_title),
+                    text = applicationContext.getString(R.string.sa_new_alert_text, sa.label, typeName),
+                    elevated = true,
+                    packageName = sa.packageName,
+                )
+            }
+        }
+        prefs.edit().putStringSet("set", currentKeys).apply()
     }
 
     companion object {

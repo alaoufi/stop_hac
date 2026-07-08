@@ -133,6 +133,38 @@ class Notifier(private val context: Context) {
         runCatching { manager.notify(ALERT_BASE_ID + (event.id % 900).toInt(), notification) }
     }
 
+    /**
+     * A general alert not tied to a sensor event (new install, new special
+     * access, etc.). [elevated] routes it to the high-importance channel and
+     * offers a shortcut to the app's system settings.
+     */
+    fun notifyGeneric(
+        notificationId: Int,
+        title: String,
+        text: String,
+        elevated: Boolean,
+        packageName: String? = null,
+    ) {
+        if (!hasPostPermission()) return
+        val channel = if (elevated) CHANNEL_ALERTS else CHANNEL_INFO
+        val builder = NotificationCompat.Builder(context, channel)
+            .setContentTitle(title)
+            .setContentText(text)
+            .setStyle(NotificationCompat.BigTextStyle().bigText(text))
+            .setSmallIcon(R.drawable.ic_shield)
+            .setContentIntent(openAppIntent())
+            .setAutoCancel(true)
+            .setPriority(if (elevated) NotificationCompat.PRIORITY_HIGH else NotificationCompat.PRIORITY_DEFAULT)
+        if (packageName != null) {
+            builder.addAction(
+                R.drawable.ic_settings,
+                context.getString(R.string.action_app_info),
+                appInfoIntent(packageName),
+            )
+        }
+        runCatching { manager.notify(notificationId, builder.build()) }
+    }
+
     private fun openAppIntent(): PendingIntent = PendingIntent.getActivity(
         context, 1,
         Intent(context, MainActivity::class.java).apply {

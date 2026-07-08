@@ -163,6 +163,24 @@
     <string name="window_month">٣٠ يوماً</string>
     <string name="window_all">الكل</string>
 
+    <!-- إنذارات التثبيت -->
+    <string name="install_new_app_title">تطبيق جديد مُثبّت</string>
+    <string name="install_new_app_plain">تم تثبيت %1$s للتو.</string>
+    <string name="install_new_app_perms">تم تثبيت %1$s للتو ويمكنه بالفعل استخدام: %2$s.</string>
+
+    <!-- الوصول الخاص عالي الخطورة -->
+    <string name="permissions_special_title">وصول عالي الصلاحية</string>
+    <string name="permissions_special_subtitle">تطبيقات تملك الوصول القوي الذي تعتمد عليه البرمجيات الخبيثة. راجع أي شيء لا تعرفه.</string>
+    <string name="sa_accessibility">إمكانية الوصول</string>
+    <string name="sa_notification_listener">قراءة الإشعارات</string>
+    <string name="sa_device_admin">مدير الجهاز</string>
+    <string name="sa_accessibility_risk">يمكنه قراءة كل ما على شاشتك والضغط والكتابة نيابةً عنك. امنحها للتطبيقات الموثوقة تماماً فقط.</string>
+    <string name="sa_notification_risk">يمكنه قراءة كل إشعاراتك، بما فيها الرسائل ورموز التحقق.</string>
+    <string name="sa_device_admin_risk">يملك تحكم المسؤول (يمكنه قفل الجهاز أو مسحه) ويصعب إلغاء تثبيته.</string>
+    <string name="sa_new_alert_title">مُنح وصول عالي الصلاحية جديد</string>
+    <string name="sa_new_alert_text">%1$s يملك الآن وصول %2$s.</string>
+    <string name="sa_none">لا شيء يملك هذا الوصول — ممتاز.</string>
+
     <!-- الصلاحيات -->
     <string name="permissions_title">مراقب الصلاحيات</string>
     <string name="permissions_subtitle">التطبيقات التي تملك صلاحيات حساسة حالياً. اضغط على تطبيق لتغييره من إعدادات النظام.</string>

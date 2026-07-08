@@ -163,6 +163,24 @@
     <string name="window_month">30 days</string>
     <string name="window_all">All</string>
 
+    <!-- Install alerts -->
+    <string name="install_new_app_title">New app installed</string>
+    <string name="install_new_app_plain">%1$s was just installed.</string>
+    <string name="install_new_app_perms">%1$s was just installed and can already use: %2$s.</string>
+
+    <!-- Special access -->
+    <string name="permissions_special_title">High-power access</string>
+    <string name="permissions_special_subtitle">Apps with the powerful access malware relies on. Review anything you don\'t recognise.</string>
+    <string name="sa_accessibility">Accessibility</string>
+    <string name="sa_notification_listener">Notification access</string>
+    <string name="sa_device_admin">Device admin</string>
+    <string name="sa_accessibility_risk">Can read everything on your screen and tap/type for you. Grant only to fully trusted apps.</string>
+    <string name="sa_notification_risk">Can read all your notifications, including messages and one-time codes.</string>
+    <string name="sa_device_admin_risk">Holds administrator control (can lock or wipe the device) and is harder to uninstall.</string>
+    <string name="sa_new_alert_title">New high-power access granted</string>
+    <string name="sa_new_alert_text">%1$s now holds %2$s access.</string>
+    <string name="sa_none">Nothing has this access — good.</string>
+
     <!-- Permissions -->
     <string name="permissions_title">Permission monitor</string>
     <string name="permissions_subtitle">Apps that currently hold sensitive permissions. Tap an app to change it in system settings.</string>
