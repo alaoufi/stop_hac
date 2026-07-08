@@ -63,6 +63,20 @@ class DashboardViewModel(private val container: AppContainer) : ViewModel() {
         }
     }
 
+    /**
+     * Panic: instant maximum lockdown. Turns on the forced sensor block and
+     * maximum-protection alerting in one tap, then reports how the sensor block
+     * was enforced (root vs system toggle).
+     */
+    fun panic(onResult: (com.privacyshield.monitor.monitor.ForceBlockController.Result) -> Unit) {
+        viewModelScope.launch {
+            container.settings.setMaxProtection(true)
+            container.settings.setNotifyNormal(true)
+            container.settings.setForceBlock(true)
+            onResult(forceBlock.block())
+        }
+    }
+
     val state: StateFlow<DashboardUiState> = combine(
         MonitorState.running,
         MonitorState.detectorSupported,

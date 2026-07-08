@@ -117,6 +117,32 @@ fun SettingsScreen(
                         }
                     }
                     ToggleRow(
+                        stringResource(R.string.settings_app_lock),
+                        stringResource(R.string.settings_app_lock_desc),
+                        settings.appLockEnabled,
+                    ) { enabled ->
+                        if (enabled && !vm.canAuthenticate()) {
+                            android.widget.Toast.makeText(
+                                context,
+                                context.getString(R.string.settings_block_lock_unavailable),
+                                android.widget.Toast.LENGTH_LONG,
+                            ).show()
+                        } else {
+                            vm.setAppLock(enabled)
+                        }
+                    }
+                    ToggleRow(
+                        stringResource(R.string.settings_tamper),
+                        stringResource(R.string.settings_tamper_desc),
+                        vm.isTamperProtectionActive(),
+                    ) { enabled ->
+                        if (enabled) {
+                            context.startActivity(vm.enableTamperProtectionIntent())
+                        } else {
+                            vm.disableTamperProtection()
+                        }
+                    }
+                    ToggleRow(
                         stringResource(R.string.settings_overlay_indicator),
                         stringResource(R.string.settings_overlay_indicator_desc),
                         settings.overlayIndicatorEnabled,

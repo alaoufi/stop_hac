@@ -51,6 +51,37 @@ class SettingsViewModel(private val container: AppContainer) : ViewModel() {
     fun setBlockLock(enabled: Boolean) =
         viewModelScope.launch { container.settings.setBlockLock(enabled) }
 
+    fun setAppLock(enabled: Boolean) =
+        viewModelScope.launch { container.settings.setAppLock(enabled) }
+
+    // ---- Tamper protection (device admin) ----
+    private val dpm = container.appContext
+        .getSystemService(android.content.Context.DEVICE_POLICY_SERVICE)
+        as android.app.admin.DevicePolicyManager
+
+    fun isTamperProtectionActive(): Boolean =
+        dpm.isAdminActive(com.privacyshield.monitor.monitor.TamperAdminReceiver.component(container.appContext))
+
+    fun enableTamperProtectionIntent(): android.content.Intent =
+        android.content.Intent(android.app.admin.DevicePolicyManager.ACTION_ADD_DEVICE_ADMIN).apply {
+            putExtra(
+                android.app.admin.DevicePolicyManager.EXTRA_DEVICE_ADMIN,
+                com.privacyshield.monitor.monitor.TamperAdminReceiver.component(container.appContext),
+            )
+            putExtra(
+                android.app.admin.DevicePolicyManager.EXTRA_ADD_EXPLANATION,
+                container.appContext.getString(com.privacyshield.monitor.R.string.tamper_explanation),
+            )
+        }
+
+    fun disableTamperProtection() {
+        runCatching {
+            dpm.removeActiveAdmin(
+                com.privacyshield.monitor.monitor.TamperAdminReceiver.component(container.appContext),
+            )
+        }
+    }
+
     private val scheduler = com.privacyshield.monitor.monitor.BlockScheduler(container.appContext)
 
     /** Persists the auto-block schedule and (re)arms or cancels the alarms. */

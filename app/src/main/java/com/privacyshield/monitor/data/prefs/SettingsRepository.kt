@@ -26,6 +26,8 @@ data class AppSettings(
     val maxProtectionEnabled: Boolean = false,
     val forceBlockEnabled: Boolean = false,
     val blockLockEnabled: Boolean = false,
+    /** Require authentication to open the app itself. */
+    val appLockEnabled: Boolean = false,
     val scheduleEnabled: Boolean = false,
     /** Daily auto-block window, in minutes-of-day (default 22:00–07:00). */
     val scheduleStartMinutes: Int = 22 * 60,
@@ -57,6 +59,7 @@ class SettingsRepository(private val context: Context) {
         val MAX_PROTECTION = booleanPreferencesKey("max_protection")
         val FORCE_BLOCK = booleanPreferencesKey("force_block")
         val BLOCK_LOCK = booleanPreferencesKey("block_lock")
+        val APP_LOCK = booleanPreferencesKey("app_lock")
         val SCHEDULE_ENABLED = booleanPreferencesKey("schedule_enabled")
         val SCHEDULE_START = stringPreferencesKey("schedule_start")
         val SCHEDULE_END = stringPreferencesKey("schedule_end")
@@ -79,6 +82,7 @@ class SettingsRepository(private val context: Context) {
             maxProtectionEnabled = p[Keys.MAX_PROTECTION] ?: false,
             forceBlockEnabled = p[Keys.FORCE_BLOCK] ?: false,
             blockLockEnabled = p[Keys.BLOCK_LOCK] ?: false,
+            appLockEnabled = p[Keys.APP_LOCK] ?: false,
             scheduleEnabled = p[Keys.SCHEDULE_ENABLED] ?: false,
             scheduleStartMinutes = p[Keys.SCHEDULE_START]?.toIntOrNull() ?: (22 * 60),
             scheduleEndMinutes = p[Keys.SCHEDULE_END]?.toIntOrNull() ?: (7 * 60),
@@ -99,6 +103,7 @@ class SettingsRepository(private val context: Context) {
     suspend fun setMaxProtection(enabled: Boolean) = edit { it[Keys.MAX_PROTECTION] = enabled }
     suspend fun setForceBlock(enabled: Boolean) = edit { it[Keys.FORCE_BLOCK] = enabled }
     suspend fun setBlockLock(enabled: Boolean) = edit { it[Keys.BLOCK_LOCK] = enabled }
+    suspend fun setAppLock(enabled: Boolean) = edit { it[Keys.APP_LOCK] = enabled }
     suspend fun setSchedule(enabled: Boolean, startMinutes: Int, endMinutes: Int) = edit {
         it[Keys.SCHEDULE_ENABLED] = enabled
         it[Keys.SCHEDULE_START] = startMinutes.toString()

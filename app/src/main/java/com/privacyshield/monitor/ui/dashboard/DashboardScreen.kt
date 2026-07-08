@@ -117,6 +117,9 @@ fun DashboardScreen(
             // Always-visible forced block toggle for the camera & microphone.
             item { ForceBlockCard(vm, state.forceBlockEnabled, state.blockLockEnabled) }
 
+            // One-tap emergency lockdown.
+            item { PanicButton(vm) }
+
             if (!state.detectorSupported) {
                 item { DetectorLimitationCard() }
             }
@@ -549,6 +552,31 @@ private fun ForceBlockCard(vm: DashboardViewModel, blocked: Boolean, lockEnabled
                 )
             }
         }
+    }
+}
+
+@Composable
+private fun PanicButton(vm: DashboardViewModel) {
+    val context = LocalContext.current
+    Button(
+        onClick = {
+            vm.panic { result ->
+                handleBlockResult(context, result, wasBlocked = false)
+                android.widget.Toast.makeText(
+                    context,
+                    context.getString(R.string.dashboard_panic_done),
+                    android.widget.Toast.LENGTH_LONG,
+                ).show()
+            }
+        },
+        modifier = Modifier.fillMaxWidth(),
+        colors = ButtonDefaults.buttonColors(containerColor = RiskRed),
+    ) {
+        Text(
+            stringResource(R.string.dashboard_panic),
+            style = MaterialTheme.typography.titleMedium,
+            fontWeight = FontWeight.Bold,
+        )
     }
 }
 

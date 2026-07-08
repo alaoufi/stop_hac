@@ -87,6 +87,22 @@
     <string name="dashboard_block_open_system">Opened the system sensor switch — turn it on to enforce.</string>
     <string name="dashboard_block_failed">Could not enforce: %1$s</string>
     <string name="dashboard_block_locked_note">🔒 Unlocking requires your fingerprint or PIN.</string>
+    <string name="dashboard_panic">🚨 Panic — lock everything down</string>
+    <string name="dashboard_panic_done">Lockdown on: sensors force-blocked and alerts maxed.</string>
+
+    <!-- App lock -->
+    <string name="app_lock_title">Unlock Privacy Shield</string>
+    <string name="app_lock_subtitle">Authenticate to open the app.</string>
+    <string name="app_lock_locked">Locked — authenticate to continue.</string>
+    <string name="app_lock_unlock">Unlock</string>
+    <string name="settings_app_lock">Lock the app</string>
+    <string name="settings_app_lock_desc">Require your fingerprint / face / PIN to open Privacy Shield, so no one can change your protection.</string>
+
+    <!-- Tamper protection -->
+    <string name="settings_tamper">Anti-uninstall protection</string>
+    <string name="settings_tamper_desc">Make the app a device admin so it can\'t be uninstalled without first removing admin — which warns you. Turn off here before uninstalling.</string>
+    <string name="tamper_explanation">Enabling this stops the app from being silently uninstalled, protecting your privacy monitoring from tampering.</string>
+    <string name="tamper_disable_warning">Turning this off removes uninstall protection. If you didn\'t start this, someone may be trying to disable your privacy monitoring.</string>
     <string name="block_auth_title">Confirm it\'s you</string>
     <string name="block_auth_subtitle">Authenticate to unblock the camera &amp; microphone.</string>
     <string name="settings_block_lock">Lock unblocking</string>

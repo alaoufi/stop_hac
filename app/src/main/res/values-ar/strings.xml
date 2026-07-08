@@ -87,6 +87,22 @@
     <string name="dashboard_block_open_system">فُتح مفتاح مستشعرات النظام — فعّله لفرض الحظر.</string>
     <string name="dashboard_block_failed">تعذّر الفرض: %1$s</string>
     <string name="dashboard_block_locked_note">🔒 فكّ الحظر يتطلب بصمتك أو رقمك السري.</string>
+    <string name="dashboard_panic">🚨 الطوارئ — أغلق كل شيء</string>
+    <string name="dashboard_panic_done">تم الإغلاق: حظر قصري للمستشعرات وأقصى تنبيه.</string>
+
+    <!-- قفل التطبيق -->
+    <string name="app_lock_title">فتح درع الخصوصية</string>
+    <string name="app_lock_subtitle">صادِق لفتح التطبيق.</string>
+    <string name="app_lock_locked">مقفول — صادِق للمتابعة.</string>
+    <string name="app_lock_unlock">فتح</string>
+    <string name="settings_app_lock">قفل التطبيق</string>
+    <string name="settings_app_lock_desc">اطلب بصمتك / وجهك / رقمك السري لفتح درع الخصوصية، حتى لا يغيّر أحد حمايتك.</string>
+
+    <!-- الحماية من الحذف -->
+    <string name="settings_tamper">الحماية من إلغاء التثبيت</string>
+    <string name="settings_tamper_desc">اجعل التطبيق مدير جهاز حتى لا يُحذف قبل إزالة صلاحية المدير أولاً — وهو ما ينبّهك. أوقفه من هنا قبل إلغاء التثبيت.</string>
+    <string name="tamper_explanation">تفعيل هذا يمنع حذف التطبيق بصمت، ويحمي مراقبة خصوصيتك من العبث.</string>
+    <string name="tamper_disable_warning">إيقاف هذا يزيل الحماية من الحذف. إن لم تكن أنت من بدأ هذا، فقد يحاول أحدهم تعطيل مراقبة خصوصيتك.</string>
     <string name="block_auth_title">تأكيد هويتك</string>
     <string name="block_auth_subtitle">صادِق لفكّ حظر الكاميرا والميكروفون.</string>
     <string name="settings_block_lock">قفل فكّ الحظر</string>
