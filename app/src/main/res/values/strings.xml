@@ -13,6 +13,7 @@
 
     <!-- Navigation -->
     <string name="nav_dashboard">Dashboard</string>
+    <string name="nav_apps">Apps</string>
     <string name="nav_events">Log</string>
     <string name="nav_permissions">Permissions</string>
     <string name="nav_reports">Reports</string>
@@ -86,6 +87,26 @@
     <string name="sheet_force_stop_hint">Opens the system App info screen — tap \"Force stop\" there. Android does not let another app stop it silently.</string>
     <string name="sheet_uninstall">Uninstall permanently</string>
     <string name="sheet_app_info">App info &amp; permissions</string>
+
+    <!-- Apps screen -->
+    <string name="apps_title">Apps &amp; background activity</string>
+    <string name="apps_subtitle">Every app, what it can access, whether it has been active, and its risk. Tap an app to stop or uninstall it.</string>
+    <string name="apps_user_only">Installed apps</string>
+    <string name="apps_include_system">Include system</string>
+    <string name="apps_state_live">Using a sensor now</string>
+    <string name="apps_state_installed">Idle</string>
+    <string name="apps_category_other">App</string>
+    <string name="apps_can_access">Can access: %1$s.</string>
+    <string name="apps_no_sensitive">No camera/mic/location access.</string>
+    <string name="apps_bg_uses">Used sensors in the background %1$d times (last 30 days).</string>
+    <string name="cat_game">Game</string>
+    <string name="cat_audio">Audio / music</string>
+    <string name="cat_video">Video</string>
+    <string name="cat_image">Photos</string>
+    <string name="cat_social">Social / messaging</string>
+    <string name="cat_news">News</string>
+    <string name="cat_maps">Maps / navigation</string>
+    <string name="cat_productivity">Productivity</string>
     <string name="level_high">High</string>
     <string name="level_high_desc">No suspicious activity detected recently.</string>
     <string name="level_medium">Medium</string>

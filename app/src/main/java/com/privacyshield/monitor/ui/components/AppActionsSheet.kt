@@ -32,14 +32,13 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.privacyshield.monitor.R
-import com.privacyshield.monitor.core.model.SecurityEvent
-import com.privacyshield.monitor.ui.rememberReason
-import com.privacyshield.monitor.ui.sensorName
+import com.privacyshield.monitor.core.model.RiskLevel
 
 /**
  * Bottom sheet of everything the user can do about one flagged app: see its
- * risk level and the reason, then act — force-stop (via the OS App Info screen),
- * uninstall it (system dialog), or open its settings to revoke a permission.
+ * risk level and a short explanation, then act — force-stop (via the OS App Info
+ * screen), uninstall it (system dialog), or open its settings to revoke a
+ * permission.
  *
  * Honesty: Android does not let a normal app kill or delete another app
  * silently. We launch the official system flows; the user confirms. That is the
@@ -47,9 +46,15 @@ import com.privacyshield.monitor.ui.sensorName
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AppActionsSheet(event: SecurityEvent, onDismiss: () -> Unit) {
+fun AppActionsSheet(
+    packageName: String,
+    appLabel: String,
+    riskLevel: RiskLevel,
+    detail: String,
+    onDismiss: () -> Unit,
+) {
     val context = LocalContext.current
-    val pkg = event.packageName
+    val pkg = packageName
 
     ModalBottomSheet(onDismissRequest = onDismiss) {
         Column(
@@ -64,7 +69,7 @@ fun AppActionsSheet(event: SecurityEvent, onDismiss: () -> Unit) {
                 Spacer(Modifier.size(14.dp))
                 Column(Modifier.weight(1f)) {
                     Text(
-                        event.appLabel,
+                        appLabel,
                         style = MaterialTheme.typography.titleLarge,
                         fontWeight = FontWeight.Bold,
                         maxLines = 1,
@@ -85,12 +90,9 @@ fun AppActionsSheet(event: SecurityEvent, onDismiss: () -> Unit) {
                     style = MaterialTheme.typography.labelLarge,
                 )
                 Spacer(Modifier.size(8.dp))
-                RiskBadge(event.riskLevel)
+                RiskBadge(riskLevel)
             }
-            Text(
-                "${sensorName(event.sensor)} · ${rememberReason(event)}",
-                style = MaterialTheme.typography.bodyMedium,
-            )
+            Text(detail, style = MaterialTheme.typography.bodyMedium)
 
             Spacer(Modifier.size(4.dp))
 

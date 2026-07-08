@@ -37,6 +37,15 @@ class EventRepository(private val dao: EventDao) {
     suspend fun backgroundHitsToday(packageName: String, sensor: SensorType, now: Long): Int =
         dao.backgroundHitsSince(packageName, sensor.name, now - DAY_MS)
 
+    /** The most severe risk level logged for an app since [sinceMillis], or null. */
+    suspend fun worstRiskForApp(packageName: String, sinceMillis: Long): RiskLevel? =
+        dao.riskLevelsForApp(packageName, sinceMillis)
+            .mapNotNull { runCatching { RiskLevel.valueOf(it) }.getOrNull() }
+            .maxByOrNull { it.weight }
+
+    suspend fun backgroundCountForApp(packageName: String, sinceMillis: Long): Int =
+        dao.backgroundCountForApp(packageName, sinceMillis)
+
     fun countByRiskSince(risk: RiskLevel, sinceMillis: Long): Flow<Int> =
         dao.countByRiskSince(risk.name, sinceMillis)
 

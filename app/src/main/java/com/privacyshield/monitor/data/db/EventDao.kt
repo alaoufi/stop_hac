@@ -57,6 +57,15 @@ interface EventDao {
     )
     suspend fun backgroundHitsSince(pkg: String, sensor: String, since: Long): Int
 
+    @Query("SELECT riskLevel FROM events WHERE packageName = :pkg AND startTimeMillis >= :since")
+    suspend fun riskLevelsForApp(pkg: String, since: Long): List<String>
+
+    @Query(
+        "SELECT COUNT(*) FROM events WHERE packageName = :pkg AND foreground = 0 " +
+            "AND startTimeMillis >= :since",
+    )
+    suspend fun backgroundCountForApp(pkg: String, since: Long): Int
+
     @Query("SELECT COUNT(*) FROM events WHERE riskLevel = :risk AND startTimeMillis >= :since")
     fun countByRiskSince(risk: String, since: Long): Flow<Int>
 

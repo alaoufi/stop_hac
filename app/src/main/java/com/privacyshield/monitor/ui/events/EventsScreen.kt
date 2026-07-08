@@ -46,6 +46,7 @@ import com.privacyshield.monitor.core.model.SensorType
 import com.privacyshield.monitor.ui.components.AppActionsSheet
 import com.privacyshield.monitor.ui.components.EventRow
 import com.privacyshield.monitor.ui.components.riskLabel
+import com.privacyshield.monitor.ui.rememberReason
 import com.privacyshield.monitor.ui.sensorName
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -182,7 +183,13 @@ fun EventsScreen(vm: EventsViewModel) {
     }
 
     selected?.let { event ->
-        AppActionsSheet(event = event, onDismiss = { selected = null })
+        AppActionsSheet(
+            packageName = event.packageName,
+            appLabel = event.appLabel,
+            riskLevel = event.riskLevel,
+            detail = "${sensorName(event.sensor)} · ${rememberReason(event)}",
+            onDismiss = { selected = null },
+        )
     }
 }
 

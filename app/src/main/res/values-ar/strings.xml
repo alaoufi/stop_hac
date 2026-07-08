@@ -13,6 +13,7 @@
 
     <!-- التنقل -->
     <string name="nav_dashboard">الرئيسية</string>
+    <string name="nav_apps">التطبيقات</string>
     <string name="nav_events">السجل</string>
     <string name="nav_permissions">الصلاحيات</string>
     <string name="nav_reports">التقارير</string>
@@ -86,6 +87,26 @@
     <string name="sheet_force_stop_hint">يفتح شاشة «معلومات التطبيق» في النظام — اضغط «فرض الإيقاف» هناك. لا يسمح أندرويد لأي تطبيق بإيقاف غيره بصمت.</string>
     <string name="sheet_uninstall">حذف التطبيق نهائياً</string>
     <string name="sheet_app_info">معلومات التطبيق والصلاحيات</string>
+
+    <!-- شاشة التطبيقات -->
+    <string name="apps_title">التطبيقات ونشاط الخلفية</string>
+    <string name="apps_subtitle">كل تطبيق، وما يمكنه الوصول إليه، وهل كان نشطاً، ودرجة خطورته. اضغط على تطبيق لإيقافه أو حذفه.</string>
+    <string name="apps_user_only">التطبيقات المثبّتة</string>
+    <string name="apps_include_system">مع تطبيقات النظام</string>
+    <string name="apps_state_live">يستخدم مستشعراً الآن</string>
+    <string name="apps_state_installed">خامل</string>
+    <string name="apps_category_other">تطبيق</string>
+    <string name="apps_can_access">يمكنه الوصول إلى: %1$s.</string>
+    <string name="apps_no_sensitive">لا يصل للكاميرا/الميكروفون/الموقع.</string>
+    <string name="apps_bg_uses">استخدم المستشعرات بالخلفية %1$d مرة (آخر ٣٠ يوماً).</string>
+    <string name="cat_game">لعبة</string>
+    <string name="cat_audio">صوت / موسيقى</string>
+    <string name="cat_video">فيديو</string>
+    <string name="cat_image">صور</string>
+    <string name="cat_social">تواصل / مراسلة</string>
+    <string name="cat_news">أخبار</string>
+    <string name="cat_maps">خرائط / ملاحة</string>
+    <string name="cat_productivity">إنتاجية</string>
     <string name="level_high">مرتفع</string>
     <string name="level_high_desc">لم يُكتشف أي نشاط مريب مؤخراً.</string>
     <string name="level_medium">متوسط</string>

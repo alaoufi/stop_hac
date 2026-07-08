@@ -3,6 +3,7 @@ package com.privacyshield.monitor.ui
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.privacyshield.monitor.di.AppContainer
+import com.privacyshield.monitor.ui.apps.AppsViewModel
 import com.privacyshield.monitor.ui.dashboard.DashboardViewModel
 import com.privacyshield.monitor.ui.events.EventsViewModel
 import com.privacyshield.monitor.ui.permissions.PermissionsViewModel
@@ -19,6 +20,8 @@ class AppViewModelFactory(private val container: AppContainer) : ViewModelProvid
     override fun <T : ViewModel> create(modelClass: Class<T>): T = when {
         modelClass.isAssignableFrom(DashboardViewModel::class.java) ->
             DashboardViewModel(container) as T
+        modelClass.isAssignableFrom(AppsViewModel::class.java) ->
+            AppsViewModel(container) as T
         modelClass.isAssignableFrom(EventsViewModel::class.java) ->
             EventsViewModel(container) as T
         modelClass.isAssignableFrom(WhitelistViewModel::class.java) ->

@@ -2,12 +2,12 @@ package com.privacyshield.monitor.ui.navigation
 
 import androidx.annotation.StringRes
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Apps
 import androidx.compose.material.icons.filled.Dashboard
 import androidx.compose.material.icons.filled.History
 import androidx.compose.material.icons.filled.Assessment
 import androidx.compose.material.icons.filled.VerifiedUser
 import androidx.compose.material.icons.filled.Settings
-import androidx.compose.material.icons.filled.Security
 import androidx.compose.ui.graphics.vector.ImageVector
 import com.privacyshield.monitor.R
 
@@ -18,6 +18,7 @@ enum class TopDestination(
     val icon: ImageVector,
 ) {
     DASHBOARD("dashboard", R.string.nav_dashboard, Icons.Filled.Dashboard),
+    APPS("apps", R.string.nav_apps, Icons.Filled.Apps),
     EVENTS("events", R.string.nav_events, Icons.Filled.History),
     PERMISSIONS("permissions", R.string.nav_permissions, Icons.Filled.VerifiedUser),
     REPORTS("reports", R.string.nav_reports, Icons.Filled.Assessment),

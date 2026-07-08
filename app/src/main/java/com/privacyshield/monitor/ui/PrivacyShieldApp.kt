@@ -18,6 +18,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.privacyshield.monitor.di.AppContainer
+import com.privacyshield.monitor.ui.apps.AppsScreen
 import com.privacyshield.monitor.ui.dashboard.DashboardScreen
 import com.privacyshield.monitor.ui.events.EventsScreen
 import com.privacyshield.monitor.ui.navigation.Routes
@@ -72,6 +73,9 @@ fun PrivacyShieldApp(container: AppContainer, factory: ViewModelProvider.Factory
                     onOpenEvents = { navController.navigate(TopDestination.EVENTS.route) },
                     onOpenSettings = { navController.navigate(TopDestination.SETTINGS.route) },
                 )
+            }
+            composable(TopDestination.APPS.route) {
+                AppsScreen(vm = viewModel(factory))
             }
             composable(TopDestination.EVENTS.route) {
                 EventsScreen(vm = viewModel(factory))

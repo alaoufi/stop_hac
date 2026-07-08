@@ -61,6 +61,8 @@ import com.privacyshield.monitor.monitor.RecentApp
 import com.privacyshield.monitor.monitor.RecentAppsProvider
 import com.privacyshield.monitor.ui.components.AppIcon
 import com.privacyshield.monitor.ui.formatClock
+import com.privacyshield.monitor.ui.rememberReason
+import com.privacyshield.monitor.ui.sensorName
 import com.privacyshield.monitor.ui.components.AppActionsSheet
 import com.privacyshield.monitor.ui.components.EventRow
 import com.privacyshield.monitor.ui.components.SectionCard
@@ -158,7 +160,13 @@ fun DashboardScreen(
     }
 
     selectedEvent?.let { event ->
-        AppActionsSheet(event = event, onDismiss = { selectedEvent = null })
+        AppActionsSheet(
+            packageName = event.packageName,
+            appLabel = event.appLabel,
+            riskLevel = event.riskLevel,
+            detail = "${sensorName(event.sensor)} · ${rememberReason(event)}",
+            onDismiss = { selectedEvent = null },
+        )
     }
 }
 

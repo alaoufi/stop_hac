@@ -30,6 +30,24 @@ class AppRepository(context: Context) {
 
     fun isSystemApp(packageName: String): Boolean = info(packageName).isSystemApp
 
+    /** ApplicationInfo.category (API 26+), or -1 (undefined) if unavailable. */
+    fun categoryOf(packageName: String): Int = try {
+        pm.getApplicationInfo(packageName, 0).category
+    } catch (e: PackageManager.NameNotFoundException) {
+        ApplicationInfo.CATEGORY_UNDEFINED
+    }
+
+    /** Whether [packageName] currently holds a granted [permission]. */
+    fun holdsPermission(packageName: String, permission: String): Boolean =
+        pm.checkPermission(permission, packageName) == PackageManager.PERMISSION_GRANTED
+
+    fun isInstalled(packageName: String): Boolean = try {
+        pm.getApplicationInfo(packageName, 0)
+        true
+    } catch (e: PackageManager.NameNotFoundException) {
+        false
+    }
+
     /** All launchable / user-visible apps, sorted by label, for the whitelist picker. */
     fun installedApps(includeSystem: Boolean): List<AppInfo> =
         pm.getInstalledApplications(0)
