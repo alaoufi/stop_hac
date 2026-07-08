@@ -69,6 +69,22 @@
                 android:value="privacy_sensor_monitoring" />
         </service>
 
+        <!-- Local, no-root per-app internet firewall. It only DROPS the traffic
+             of blocked apps and never opens an outbound socket, so it needs no
+             INTERNET permission and cannot leak data. -->
+        <service
+            android:name=".monitor.FirewallVpnService"
+            android:exported="false"
+            android:permission="android.permission.BIND_VPN_SERVICE"
+            android:foregroundServiceType="specialUse">
+            <property
+                android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE"
+                android:value="privacy_firewall" />
+            <intent-filter>
+                <action android:name="android.net.VpnService" />
+            </intent-filter>
+        </service>
+
         <receiver
             android:name=".monitor.ScheduleReceiver"
             android:exported="false" />

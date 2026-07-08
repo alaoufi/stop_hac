@@ -46,6 +46,7 @@ fun SettingsScreen(
     vm: SettingsViewModel,
     onOpenWhitelist: () -> Unit,
     onOpenAbout: () -> Unit,
+    onOpenFirewall: () -> Unit,
 ) {
     val settings by vm.settings.collectAsStateWithLifecycle()
     val context = LocalContext.current
@@ -126,6 +127,7 @@ fun SettingsScreen(
                         vm.setOverlayIndicator(enabled)
                     }
                     Spacer(Modifier.size(8.dp))
+                    NavRow(stringResource(R.string.firewall_title), onOpenFirewall)
                     Row(
                         Modifier
                             .fillMaxWidth()

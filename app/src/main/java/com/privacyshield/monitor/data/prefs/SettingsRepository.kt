@@ -6,8 +6,10 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
+import androidx.datastore.preferences.core.stringSetPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 
 private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "settings")
@@ -29,6 +31,8 @@ data class AppSettings(
     val scheduleStartMinutes: Int = 22 * 60,
     val scheduleEndMinutes: Int = 7 * 60,
     val overlayIndicatorEnabled: Boolean = false,
+    /** Per-app internet firewall master switch. */
+    val firewallEnabled: Boolean = false,
     val notifyNormal: Boolean = false,
     /** Alert on every camera/microphone access, even normal foreground use. */
     val alertOnSensorUse: Boolean = true,
@@ -57,6 +61,8 @@ class SettingsRepository(private val context: Context) {
         val SCHEDULE_START = stringPreferencesKey("schedule_start")
         val SCHEDULE_END = stringPreferencesKey("schedule_end")
         val OVERLAY_INDICATOR = booleanPreferencesKey("overlay_indicator")
+        val FIREWALL_ENABLED = booleanPreferencesKey("firewall_enabled")
+        val BLOCKED_APPS = stringSetPreferencesKey("firewall_blocked_apps")
         val NOTIFY_NORMAL = booleanPreferencesKey("notify_normal")
         val ALERT_SENSOR_USE = booleanPreferencesKey("alert_sensor_use")
         val INCLUDE_SYSTEM = booleanPreferencesKey("include_system")
@@ -77,6 +83,7 @@ class SettingsRepository(private val context: Context) {
             scheduleStartMinutes = p[Keys.SCHEDULE_START]?.toIntOrNull() ?: (22 * 60),
             scheduleEndMinutes = p[Keys.SCHEDULE_END]?.toIntOrNull() ?: (7 * 60),
             overlayIndicatorEnabled = p[Keys.OVERLAY_INDICATOR] ?: false,
+            firewallEnabled = p[Keys.FIREWALL_ENABLED] ?: false,
             notifyNormal = p[Keys.NOTIFY_NORMAL] ?: false,
             alertOnSensorUse = p[Keys.ALERT_SENSOR_USE] ?: true,
             includeSystemApps = p[Keys.INCLUDE_SYSTEM] ?: false,
@@ -98,6 +105,16 @@ class SettingsRepository(private val context: Context) {
         it[Keys.SCHEDULE_END] = endMinutes.toString()
     }
     suspend fun setOverlayIndicator(enabled: Boolean) = edit { it[Keys.OVERLAY_INDICATOR] = enabled }
+    suspend fun setFirewallEnabled(enabled: Boolean) = edit { it[Keys.FIREWALL_ENABLED] = enabled }
+
+    /** Package names whose internet access is blocked by the firewall. */
+    val blockedApps: Flow<Set<String>> =
+        context.dataStore.data.map { it[Keys.BLOCKED_APPS] ?: emptySet() }
+
+    suspend fun setBlockedApps(packages: Set<String>) = edit { it[Keys.BLOCKED_APPS] = packages }
+
+    suspend fun blockedAppsNow(): Set<String> =
+        context.dataStore.data.map { it[Keys.BLOCKED_APPS] ?: emptySet() }.first()
     suspend fun setNotifyNormal(enabled: Boolean) = edit { it[Keys.NOTIFY_NORMAL] = enabled }
     suspend fun setAlertOnSensorUse(enabled: Boolean) = edit { it[Keys.ALERT_SENSOR_USE] = enabled }
     suspend fun setIncludeSystemApps(enabled: Boolean) = edit { it[Keys.INCLUDE_SYSTEM] = enabled }

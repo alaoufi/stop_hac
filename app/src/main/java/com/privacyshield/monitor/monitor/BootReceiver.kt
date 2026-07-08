@@ -33,6 +33,9 @@ class BootReceiver : BroadcastReceiver() {
                         settings.scheduleEndMinutes,
                     )
                 }
+                if (settings.firewallEnabled) {
+                    FirewallVpnService.start(context)
+                }
                 PeriodicScanWorker.schedule(context)
             } finally {
                 pending.finish()

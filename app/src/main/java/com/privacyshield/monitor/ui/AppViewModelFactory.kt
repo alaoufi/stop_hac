@@ -6,6 +6,7 @@ import com.privacyshield.monitor.di.AppContainer
 import com.privacyshield.monitor.ui.apps.AppsViewModel
 import com.privacyshield.monitor.ui.dashboard.DashboardViewModel
 import com.privacyshield.monitor.ui.events.EventsViewModel
+import com.privacyshield.monitor.ui.firewall.FirewallViewModel
 import com.privacyshield.monitor.ui.permissions.PermissionsViewModel
 import com.privacyshield.monitor.ui.reports.ReportsViewModel
 import com.privacyshield.monitor.ui.settings.SettingsViewModel
@@ -22,6 +23,8 @@ class AppViewModelFactory(private val container: AppContainer) : ViewModelProvid
             DashboardViewModel(container) as T
         modelClass.isAssignableFrom(AppsViewModel::class.java) ->
             AppsViewModel(container) as T
+        modelClass.isAssignableFrom(FirewallViewModel::class.java) ->
+            FirewallViewModel(container) as T
         modelClass.isAssignableFrom(EventsViewModel::class.java) ->
             EventsViewModel(container) as T
         modelClass.isAssignableFrom(WhitelistViewModel::class.java) ->

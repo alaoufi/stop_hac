@@ -164,6 +164,15 @@
     <string name="window_month">30 days</string>
     <string name="window_all">All</string>
 
+    <!-- Firewall -->
+    <string name="firewall_title">Internet firewall</string>
+    <string name="firewall_master">Per-app internet firewall</string>
+    <string name="firewall_off">Off — no apps are blocked.</string>
+    <string name="firewall_active_count">Active — %1$d app(s) cut off from the internet.</string>
+    <string name="firewall_explainer">Blocks a chosen app from all internet access — the strongest way to stop data leaving your device. Runs fully on-device: it only drops the blocked apps\' traffic and sends nothing anywhere (no internet permission).</string>
+    <string name="firewall_search">Search apps…</string>
+    <string name="firewall_running_note">Firewall active — blocking selected apps.</string>
+
     <!-- Install alerts -->
     <string name="install_new_app_title">New app installed</string>
     <string name="install_new_app_plain">%1$s was just installed.</string>

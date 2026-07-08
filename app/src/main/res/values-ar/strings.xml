@@ -164,6 +164,15 @@
     <string name="window_month">٣٠ يوماً</string>
     <string name="window_all">الكل</string>
 
+    <!-- الجدار الناري -->
+    <string name="firewall_title">جدار الإنترنت الناري</string>
+    <string name="firewall_master">جدار إنترنت لكل تطبيق</string>
+    <string name="firewall_off">مغلق — لا تطبيقات محظورة.</string>
+    <string name="firewall_active_count">مفعّل — %1$d تطبيق محجوب عن الإنترنت.</string>
+    <string name="firewall_explainer">يمنع تطبيقاً مختاراً من أي وصول للإنترنت — أقوى طريقة لإيقاف خروج بياناتك من الجهاز. يعمل محلياً بالكامل: يُسقط حزم التطبيقات المحظورة فقط ولا يرسل أي شيء لأي مكان (بلا صلاحية إنترنت).</string>
+    <string name="firewall_search">ابحث في التطبيقات…</string>
+    <string name="firewall_running_note">الجدار الناري مفعّل — يحجب التطبيقات المختارة.</string>
+
     <!-- إنذارات التثبيت -->
     <string name="install_new_app_title">تطبيق جديد مُثبّت</string>
     <string name="install_new_app_plain">تم تثبيت %1$s للتو.</string>
