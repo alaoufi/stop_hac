@@ -29,7 +29,10 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -40,6 +43,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.privacyshield.monitor.R
 import com.privacyshield.monitor.core.model.RiskLevel
 import com.privacyshield.monitor.core.model.SensorType
+import com.privacyshield.monitor.ui.components.AppActionsSheet
 import com.privacyshield.monitor.ui.components.EventRow
 import com.privacyshield.monitor.ui.components.riskLabel
 import com.privacyshield.monitor.ui.sensorName
@@ -55,6 +59,7 @@ fun EventsScreen(vm: EventsViewModel) {
     val filter by vm.filter.collectAsStateWithLifecycle()
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
+    var selected by remember { mutableStateOf<com.privacyshield.monitor.core.model.SecurityEvent?>(null) }
 
     Scaffold(
         topBar = {
@@ -168,12 +173,16 @@ fun EventsScreen(vm: EventsViewModel) {
             } else {
                 LazyColumn(Modifier.padding(horizontal = 16.dp)) {
                     items(events, key = { it.id }) { event ->
-                        EventRow(event)
+                        EventRow(event, onClick = { selected = event })
                         HorizontalDivider()
                     }
                 }
             }
         }
+    }
+
+    selected?.let { event ->
+        AppActionsSheet(event = event, onDismiss = { selected = null })
     }
 }
 

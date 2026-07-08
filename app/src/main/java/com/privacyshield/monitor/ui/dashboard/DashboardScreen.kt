@@ -34,8 +34,10 @@ import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -59,6 +61,7 @@ import com.privacyshield.monitor.monitor.RecentApp
 import com.privacyshield.monitor.monitor.RecentAppsProvider
 import com.privacyshield.monitor.ui.components.AppIcon
 import com.privacyshield.monitor.ui.formatClock
+import com.privacyshield.monitor.ui.components.AppActionsSheet
 import com.privacyshield.monitor.ui.components.EventRow
 import com.privacyshield.monitor.ui.components.SectionCard
 import com.privacyshield.monitor.ui.components.StatusTile
@@ -78,6 +81,7 @@ fun DashboardScreen(
     val context = LocalContext.current
     val deviceStatus = remember { DeviceStatusProvider(context) }
     val deviceState = remember { DeviceState(context) }
+    var selectedEvent by remember { mutableStateOf<com.privacyshield.monitor.core.model.SecurityEvent?>(null) }
 
     Scaffold(
         topBar = {
@@ -142,13 +146,19 @@ fun DashboardScreen(
                         )
                     } else {
                         Column {
-                            state.recentEvents.take(6).forEach { EventRow(it) }
+                            state.recentEvents.take(6).forEach {
+                                EventRow(it, onClick = { selectedEvent = it })
+                            }
                         }
                     }
                 }
             }
             item { Spacer(Modifier.size(24.dp)) }
         }
+    }
+
+    selectedEvent?.let { event ->
+        AppActionsSheet(event = event, onDismiss = { selectedEvent = null })
     }
 }
 

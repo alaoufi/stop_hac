@@ -79,6 +79,13 @@
     <string name="dashboard_usage_access_title">Enable accurate detection</string>
     <string name="dashboard_usage_access_body">Grant \"Usage access\" so the app can tell whether an app using your camera or microphone is open on screen or hidden in the background — and list recently active apps. This stays on your device.</string>
     <string name="dashboard_usage_access_button">Grant usage access</string>
+
+    <!-- App actions sheet -->
+    <string name="sheet_risk_label">Risk level:</string>
+    <string name="sheet_force_stop">Force stop the app</string>
+    <string name="sheet_force_stop_hint">Opens the system App info screen — tap \"Force stop\" there. Android does not let another app stop it silently.</string>
+    <string name="sheet_uninstall">Uninstall permanently</string>
+    <string name="sheet_app_info">App info &amp; permissions</string>
     <string name="level_high">High</string>
     <string name="level_high_desc">No suspicious activity detected recently.</string>
     <string name="level_medium">Medium</string>

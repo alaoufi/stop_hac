@@ -79,6 +79,13 @@
     <string name="dashboard_usage_access_title">تفعيل الكشف الدقيق</string>
     <string name="dashboard_usage_access_body">امنح إذن «الوصول للاستخدام» ليتمكن التطبيق من معرفة ما إذا كان التطبيق الذي يستخدم الكاميرا أو الميكروفون مفتوحاً على الشاشة أم مخفياً بالخلفية — وليعرض التطبيقات النشطة مؤخراً. يبقى هذا على جهازك.</string>
     <string name="dashboard_usage_access_button">منح إذن الوصول للاستخدام</string>
+
+    <!-- لوحة إجراءات التطبيق -->
+    <string name="sheet_risk_label">درجة الخطورة:</string>
+    <string name="sheet_force_stop">إيقاف التطبيق فوراً</string>
+    <string name="sheet_force_stop_hint">يفتح شاشة «معلومات التطبيق» في النظام — اضغط «فرض الإيقاف» هناك. لا يسمح أندرويد لأي تطبيق بإيقاف غيره بصمت.</string>
+    <string name="sheet_uninstall">حذف التطبيق نهائياً</string>
+    <string name="sheet_app_info">معلومات التطبيق والصلاحيات</string>
     <string name="level_high">مرتفع</string>
     <string name="level_high_desc">لم يُكتشف أي نشاط مريب مؤخراً.</string>
     <string name="level_medium">متوسط</string>
