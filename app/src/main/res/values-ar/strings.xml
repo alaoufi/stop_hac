@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">درع الخصوصية</string>
+
+    <!-- إجراءات عامة -->
+    <string name="see_all">عرض الكل</string>
+    <string name="filter_all">الكل</string>
+    <string name="action_app_info">معلومات التطبيق</string>
+    <string name="action_open_dashboard">فتح التطبيق</string>
+    <string name="action_remove">إزالة</string>
+    <string name="action_cancel">إلغاء</string>
+    <string name="action_confirm">تأكيد</string>
+
+    <!-- التنقل -->
+    <string name="nav_dashboard">الرئيسية</string>
+    <string name="nav_events">السجل</string>
+    <string name="nav_permissions">الصلاحيات</string>
+    <string name="nav_reports">التقارير</string>
+    <string name="nav_settings">الإعدادات</string>
+
+    <!-- المستشعرات -->
+    <string name="sensor_camera">الكاميرا</string>
+    <string name="sensor_microphone">الميكروفون</string>
+    <string name="sensor_location">الموقع</string>
+
+    <!-- مستويات الخطورة -->
+    <string name="risk_normal">طبيعي</string>
+    <string name="risk_attention">يحتاج انتباه</string>
+    <string name="risk_suspicious">مريب</string>
+    <string name="risk_critical">خطر جداً</string>
+
+    <!-- قنوات الإشعارات -->
+    <string name="channel_service">خدمة المراقبة</string>
+    <string name="channel_service_desc">تبقي مراقبة الخصوصية تعمل.</string>
+    <string name="channel_alerts">تنبيهات الخطورة</string>
+    <string name="channel_alerts_desc">تنبيهات الوصول المريب والخطير.</string>
+    <string name="channel_info">إشعارات النشاط</string>
+    <string name="channel_info_desc">إشعارات النشاط الطبيعي للمستشعرات.</string>
+    <string name="notif_service_title">درع الخصوصية يحميك</string>
+    <string name="notif_service_title_max">وضع الحماية القصوى مُفعّل</string>
+    <string name="notif_service_active">يراقب وصول الكاميرا والميكروفون والموقع.</string>
+
+    <!-- أسباب التصنيف -->
+    <string name="reason_in_call">%1$s يستخدمه أثناء مكالمة نشطة — استخدام متوقع.</string>
+    <string name="reason_whitelist_always">لقد سمحت لـ %1$s دائماً بهذا المستشعر.</string>
+    <string name="reason_whitelist_foreground_ok">%1$s مسموح له أثناء فتحه، وهو مفتوح الآن.</string>
+    <string name="reason_whitelist_foreground_violated">%1$s مسموح له أثناء فتحه فقط، لكنه وصل للمستشعر بالخلفية.</string>
+    <string name="reason_whitelist_screen_ok">%1$s مسموح له أثناء تشغيل الشاشة.</string>
+    <string name="reason_whitelist_screen_violated">%1$s وصل للمستشعر والشاشة مغلقة، وهذا غير مسموح.</string>
+    <string name="reason_whitelist_block_bg">%1$s ممنوع بالخلفية وحاول الوصول أثناء إخفائه.</string>
+    <string name="reason_whitelist_always_block">لقد منعت %1$s من هذا المستشعر نهائياً.</string>
+    <string name="reason_fg_camera">%1$s مفتوح على الشاشة ويستخدم الكاميرا — استخدام متوقع.</string>
+    <string name="reason_fg_mic">%1$s مفتوح على الشاشة ويستخدم الميكروفون — استخدام متوقع.</string>
+    <string name="reason_fg_location">%1$s مفتوح على الشاشة ويستخدم الموقع — استخدام متوقع.</string>
+    <string name="reason_bg_long_recording">استخدم %1$s الـ%3$s لمدة %2$s دقيقة بينما كان مخفياً دون مكالمة أو تسجيل معروف، لذلك صُنّف بأنه خطر جداً.</string>
+    <string name="reason_bg_frequent">وصل %1$s للمستشعرات بالخلفية %2$s مرة اليوم دون أن تفتحه.</string>
+    <string name="reason_bg_after_boot">بدأ %1$s الوصول لمستشعر مباشرة بعد إعادة التشغيل دون أن تفتحه.</string>
+    <string name="reason_bg_system">%1$s تطبيق نظام يستخدم الـ%2$s بالخلفية — غالباً خدمة نظام.</string>
+    <string name="reason_bg_unexpected">استخدم %1$s الـ%2$s بالخلفية بينما لم تكن تستخدمه.</string>
+    <string name="reason_perm_granted">حصل %1$s على صلاحية حساسة (%2$s).</string>
+
+    <!-- الرئيسية -->
+    <string name="dashboard_security_level">مستوى الأمان الحالي</string>
+    <string name="dashboard_live_status">الحالة المباشرة</string>
+    <string name="dashboard_today_summary">نشاط اليوم</string>
+    <string name="dashboard_recent_events">آخر الأحداث</string>
+    <string name="dashboard_no_events">لا توجد أحداث مسجلة بعد.</string>
+    <string name="dashboard_monitoring_paused">المراقبة متوقفة مؤقتاً.</string>
+    <string name="dashboard_detector_unsupported">الكشف الفوري غير متاح على هذا الجهاز أو إصدار أندرويد. يستمر التطبيق في مراقبة الصلاحيات وعرض ما يستطيع قراءته من حالات.</string>
+    <string name="level_high">مرتفع</string>
+    <string name="level_high_desc">لم يُكتشف أي نشاط مريب مؤخراً.</string>
+    <string name="level_medium">متوسط</string>
+    <string name="level_medium_desc">هناك نشاط يحتاج انتباهك.</string>
+    <string name="level_low">منخفض</string>
+    <string name="level_low_desc">تم اكتشاف نشاط خطر — يُرجى المراجعة.</string>
+
+    <string name="status_in_use">قيد الاستخدام</string>
+    <string name="status_idle">خامل</string>
+    <string name="status_on">مفعّل</string>
+    <string name="status_off">مغلق</string>
+    <string name="status_service_off">الخدمة مغلقة</string>
+    <string name="status_unavailable">غير متوفر</string>
+    <string name="status_monitored">قيد المراقبة</string>
+    <string name="status_bluetooth">البلوتوث</string>
+    <string name="status_nfc">NFC</string>
+    <string name="status_screen_share">مشاركة الشاشة</string>
+
+    <!-- السجل -->
+    <string name="events_title">سجل الأحداث</string>
+    <string name="events_export">تصدير CSV</string>
+    <string name="events_clear">مسح</string>
+    <string name="events_search_hint">ابحث باسم التطبيق…</string>
+    <string name="events_empty">لا توجد أحداث تطابق عوامل التصفية.</string>
+    <string name="window_day">٢٤ ساعة</string>
+    <string name="window_week">٧ أيام</string>
+    <string name="window_month">٣٠ يوماً</string>
+    <string name="window_all">الكل</string>
+
+    <!-- الصلاحيات -->
+    <string name="permissions_title">مراقب الصلاحيات</string>
+    <string name="permissions_subtitle">التطبيقات التي تملك صلاحيات حساسة حالياً. اضغط على تطبيق لتغييره من إعدادات النظام.</string>
+    <string name="perm_camera">الكاميرا</string>
+    <string name="perm_microphone">الميكروفون</string>
+    <string name="perm_location">الموقع</string>
+    <string name="perm_bg_location">الموقع بالخلفية</string>
+    <string name="perm_notifications">الإشعارات</string>
+    <string name="perm_contacts">جهات الاتصال</string>
+    <string name="perm_sms">الرسائل</string>
+    <string name="perm_phone">حالة الهاتف</string>
+    <string name="perm_accessibility">إمكانية الوصول</string>
+    <string name="perm_overlay">الظهور فوق التطبيقات</string>
+    <string name="perm_install">تثبيت التطبيقات</string>
+    <string name="perm_storage">إدارة كل الملفات</string>
+    <string name="perm_usage">الوصول للاستخدام</string>
+    <string name="perm_camera_risk">يمكنه التقاط الصور والفيديو، حتى بصمت في الخلفية.</string>
+    <string name="perm_microphone_risk">يمكنه تسجيل الصوت من حولك، حتى وهو مخفي.</string>
+    <string name="perm_location_risk">يمكنه تتبع مكانك وبناء سجل لتحركاتك.</string>
+    <string name="perm_contacts_risk">يمكنه قراءة قائمة جهات اتصالك بالكامل.</string>
+    <string name="perm_sms_risk">يمكنه قراءة رسائلك النصية، بما فيها رموز التحقق.</string>
+    <string name="perm_accessibility_risk">يمكنه قراءة محتوى الشاشة والتصرف نيابة عنك — امنحها للتطبيقات الموثوقة فقط.</string>
+    <string name="perm_overlay_risk">يمكنه الرسم فوق التطبيقات الأخرى، وقد يُستخدم لطبقات تصيّد.</string>
+    <string name="perm_install_risk">يمكنه تثبيت تطبيقات أخرى، وقد ينشر برامج غير مرغوبة.</string>
+    <string name="perm_storage_risk">يمكنه قراءة وتعديل كل الملفات على الجهاز.</string>
+    <string name="perm_generic_risk">صلاحية حساسة تستحق المراجعة.</string>
+
+    <!-- التقارير -->
+    <string name="reports_title">التقارير</string>
+    <string name="report_weekly">أسبوعي</string>
+    <string name="report_monthly">شهري</string>
+    <string name="report_risk_distribution">توزيع الخطورة</string>
+    <string name="report_no_data">لا توجد بيانات لهذه الفترة بعد.</string>
+    <string name="report_top_camera">الأكثر استخداماً للكاميرا</string>
+    <string name="report_top_mic">الأكثر استخداماً للميكروفون</string>
+    <string name="report_top_location">الأكثر استخداماً للموقع</string>
+    <string name="report_recommendations">التوصيات</string>
+    <string name="rec_critical_present">راجع الأحداث الخطرة وفكّر في إزالة صلاحية المستشعر من التطبيقات المعنية.</string>
+    <string name="rec_review_suspicious">تحقق من عمليات الوصول المريبة بالخلفية وأضف التطبيقات الموثوقة للقائمة البيضاء.</string>
+    <string name="rec_review_mic_top">راجع أكثر التطبيقات استخداماً للميكروفون وهل تحتاجه فعلاً.</string>
+    <string name="rec_review_camera_top">راجع أكثر التطبيقات استخداماً للكاميرا وهل تحتاجها فعلاً.</string>
+    <string name="rec_enable_max_protection">فعّل وضع الحماية القصوى عندما تريد أقصى مستوى تنبيه.</string>
+    <string name="rec_periodic_review">راجع هذا التقرير بانتظام للحفاظ على خصوصيتك.</string>
+
+    <!-- القائمة البيضاء -->
+    <string name="whitelist_title">الاستثناءات (القائمة البيضاء)</string>
+    <string name="whitelist_add">إضافة استثناء</string>
+    <string name="whitelist_empty">لا توجد استثناءات بعد. أضف التطبيقات الموثوقة لتقليل التنبيهات.</string>
+    <string name="whitelist_subtitle">حدّد للتطبيق أي وصول يُعدّ متوقعاً، لكل تطبيق ومستشعر.</string>
+    <string name="whitelist_save">حفظ</string>
+    <string name="whitelist_pick_app">ابحث عن تطبيق…</string>
+    <string name="whitelist_change_app">تغيير التطبيق</string>
+    <string name="whitelist_sensor">المستشعر</string>
+    <string name="whitelist_scope">القاعدة</string>
+    <string name="scope_always_allow">السماح دائماً</string>
+    <string name="scope_foreground">السماح أثناء فتح التطبيق</string>
+    <string name="scope_screen_on">السماح أثناء تشغيل الشاشة</string>
+    <string name="scope_block_bg">المنع بالخلفية</string>
+    <string name="scope_always_block">المنع دائماً</string>
+
+    <!-- الإعدادات -->
+    <string name="settings_title">الإعدادات</string>
+    <string name="settings_monitoring">المراقبة</string>
+    <string name="settings_enable_monitoring">تفعيل المراقبة</string>
+    <string name="settings_enable_monitoring_desc">مراقبة وصول الكاميرا والميكروفون والموقع فورياً.</string>
+    <string name="settings_start_on_boot">التشغيل عند الإقلاع</string>
+    <string name="settings_start_on_boot_desc">استئناف المراقبة تلقائياً بعد إعادة التشغيل.</string>
+    <string name="settings_notify_normal">التنبيه عند الاستخدام الطبيعي</string>
+    <string name="settings_notify_normal_desc">إظهار إشعار أيضاً للوصول الطبيعي المتوقع.</string>
+    <string name="settings_include_system">تضمين تطبيقات النظام</string>
+    <string name="settings_include_system_desc">مراقبة وإدراج تطبيقات النظام المدمجة أيضاً.</string>
+    <string name="settings_max_protection">وضع الحماية القصوى</string>
+    <string name="settings_max_protection_desc">إظهار كل وصول والتنبيه بحزم. لا يسمح أندرويد لأي تطبيق بإطفاء مستشعرات تطبيق آخر، لذلك استخدم أدوات النظام أدناه لقطع الطاقة عنها فعلياً.</string>
+    <string name="settings_system_sensor_controls">أدوات مستشعرات النظام</string>
+    <string name="settings_sensor_toggle_supported">هذا الجهاز يملك مفاتيح عامة للكاميرا/الميكروفون. افتح أدوات الخصوصية.</string>
+    <string name="settings_sensor_toggle_unsupported">افتح أدوات خصوصية النظام لمراجعة وصول المستشعرات.</string>
+    <string name="settings_appearance">المظهر</string>
+    <string name="settings_theme">السمة</string>
+    <string name="theme_system">النظام</string>
+    <string name="theme_light">فاتح</string>
+    <string name="theme_dark">داكن</string>
+    <string name="settings_language">اللغة</string>
+    <string name="lang_system">النظام</string>
+    <string name="lang_arabic">العربية</string>
+    <string name="lang_english">English</string>
+    <string name="settings_data">البيانات</string>
+    <string name="settings_retention">حفظ السجل لمدة %1$d يوماً</string>
+    <string name="settings_whitelist">إدارة الاستثناءات</string>
+    <string name="settings_clear_history">مسح كل السجل</string>
+    <string name="settings_clear_confirm">سيؤدي هذا لحذف كل الأحداث المسجلة على هذا الجهاز نهائياً. هل تريد المتابعة؟</string>
+    <string name="settings_about">حول والخصوصية</string>
+    <string name="privacy_promise">يبقي هذا التطبيق كل شيء على جهازك. لا خوادم، ولا سحابة، ولا إعلانات، ولا أدوات تتبع.</string>
+
+    <!-- حول -->
+    <string name="about_title">حول التطبيق</string>
+    <string name="about_intro">درع الخصوصية نظام مراقبة للخصوصية وليس مضاد فيروسات. يراقب كيف تستخدم التطبيقات كاميرتك وميكروفونك وموقعك وصلاحياتك الحساسة، ويشرح ما يحدث بلغة بسيطة.</string>
+    <string name="about_privacy_title">بياناتك تبقى معك</string>
+    <string name="about_privacy_body">تُحفظ كل السجلات محلياً في قاعدة بيانات على الجهاز. لا يحتوي التطبيق على أي كود شبكة، ولا خدمات سحابية، ولا إعلانات، ولا تتبع. لا تتم مشاركة التصدير إلا حيث تختار أنت.</string>
+    <string name="about_limits_title">صريح بشأن قيود أندرويد</string>
+    <string name="about_limits_body">لا يسمح أندرويد لتطبيق عادي بمنع وصول تطبيق آخر للكاميرا أو الميكروفون. وعندما يتعذر المنع المباشر، يبلغك التطبيق بوضوح أنه اكتشف النشاط، ويشرحه، ويقدم خيارات مثل فتح إعدادات التطبيق لإيقافه أو إزالة الصلاحية — ويوجهك إلى مفاتيح مستشعرات النظام.</string>
+    <string name="about_how_title">كيف يعمل الكشف</string>
+    <string name="about_how_body">يعتمد الكشف الفوري على واجهة عمليات التطبيقات في أندرويد (أندرويد ١١+) لمعرفة متى يبدأ أو يتوقف أي تطبيق عن استخدام الكاميرا أو الميكروفون أو الموقع. وتُكتشف تغييرات الصلاحيات بمقارنة ما مُنح لكل تطبيق دورياً. كل ذلك يعمل بكفاءة في خدمة أمامية واحدة خفيفة.</string>
+    <string name="about_version">الإصدار ١.٠.٠</string>
+</resources>

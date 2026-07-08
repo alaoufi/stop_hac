@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Splash screen theme applied to the launch activity, per the AndroidX
+         core-splashscreen contract. It hands off to the main app theme once
+         the first frame is ready. -->
+    <style name="Theme.PrivacyShield" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">@color/splash_background</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/ic_shield</item>
+        <item name="postSplashScreenTheme">@style/Theme.PrivacyShield.Main</item>
+    </style>
+
+    <!-- The real app theme. Compose owns all styling; this only needs to be a
+         no-action-bar AppCompat DayNight theme so per-app locales work. -->
+    <style name="Theme.PrivacyShield.Main" parent="Theme.AppCompat.DayNight.NoActionBar">
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowActionBar">false</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+    </style>
+</resources>
