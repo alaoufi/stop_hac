@@ -151,8 +151,22 @@ class MonitorService : LifecycleService() {
                 .backgroundHitsToday(change.packageName, change.sensor, System.currentTimeMillis()),
             shortlyAfterBoot = deviceState.bootedRecently(),
         )
-        val verdict = analyzer.analyze(ctx)
+        var verdict = analyzer.analyze(ctx)
         val now = System.currentTimeMillis()
+
+        val isCameraOrMic = change.sensor == SensorType.CAMERA || change.sensor == SensorType.MICROPHONE
+
+        // Intrusion signal: an app reached the camera/mic while the user has the
+        // forced block ON — it should not have been able to. Escalate to CRITICAL
+        // with a dedicated "intrusion attempt" explanation.
+        val intrusion = settings.forceBlockEnabled && isCameraOrMic
+        if (intrusion) {
+            verdict = com.privacyshield.monitor.core.analysis.RiskVerdict(
+                level = com.privacyshield.monitor.core.model.RiskLevel.CRITICAL,
+                reasonKey = "reason_intrusion_blocked",
+                reasonArgs = listOf(appInfo.label, change.sensor.id),
+            )
+        }
 
         val event = SecurityEvent(
             packageName = change.packageName,
@@ -175,8 +189,14 @@ class MonitorService : LifecycleService() {
             ActiveUse(change.sensor, change.packageName, appInfo.label, now),
         )
 
-        val notify = settings.notifyNormal || verdict.level.isElevated ||
-            verdict.level == com.privacyshield.monitor.core.model.RiskLevel.ATTENTION
+        // Notify on: intrusion, any elevated/attention verdict, opt-in normal
+        // alerts, or — when the user asked to be told of every camera/mic use —
+        // any camera/microphone access at all.
+        val notify = intrusion ||
+            settings.notifyNormal ||
+            verdict.level.isElevated ||
+            verdict.level == com.privacyshield.monitor.core.model.RiskLevel.ATTENTION ||
+            (settings.alertOnSensorUse && isCameraOrMic)
         if (notify) {
             notifier.notifyEvent(
                 event.copy(id = id),

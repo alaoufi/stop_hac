@@ -31,6 +31,7 @@ object ReasonFormatter {
         "reason_bg_system" to R.string.reason_bg_system,
         "reason_bg_unexpected" to R.string.reason_bg_unexpected,
         "reason_perm_granted" to R.string.reason_perm_granted,
+        "reason_intrusion_blocked" to R.string.reason_intrusion_blocked,
     )
 
     /** Sensor ids ("camera"/"microphone"/"location") → localised names. */

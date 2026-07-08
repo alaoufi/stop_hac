@@ -30,6 +30,8 @@ data class AppSettings(
     val scheduleEndMinutes: Int = 7 * 60,
     val overlayIndicatorEnabled: Boolean = false,
     val notifyNormal: Boolean = false,
+    /** Alert on every camera/microphone access, even normal foreground use. */
+    val alertOnSensorUse: Boolean = true,
     val includeSystemApps: Boolean = false,
     val themeMode: ThemeMode = ThemeMode.SYSTEM,
     val language: AppLanguage = AppLanguage.SYSTEM,
@@ -56,6 +58,7 @@ class SettingsRepository(private val context: Context) {
         val SCHEDULE_END = stringPreferencesKey("schedule_end")
         val OVERLAY_INDICATOR = booleanPreferencesKey("overlay_indicator")
         val NOTIFY_NORMAL = booleanPreferencesKey("notify_normal")
+        val ALERT_SENSOR_USE = booleanPreferencesKey("alert_sensor_use")
         val INCLUDE_SYSTEM = booleanPreferencesKey("include_system")
         val THEME = stringPreferencesKey("theme_mode")
         val LANGUAGE = stringPreferencesKey("language")
@@ -75,6 +78,7 @@ class SettingsRepository(private val context: Context) {
             scheduleEndMinutes = p[Keys.SCHEDULE_END]?.toIntOrNull() ?: (7 * 60),
             overlayIndicatorEnabled = p[Keys.OVERLAY_INDICATOR] ?: false,
             notifyNormal = p[Keys.NOTIFY_NORMAL] ?: false,
+            alertOnSensorUse = p[Keys.ALERT_SENSOR_USE] ?: true,
             includeSystemApps = p[Keys.INCLUDE_SYSTEM] ?: false,
             themeMode = p[Keys.THEME]?.let { runCatching { ThemeMode.valueOf(it) }.getOrNull() } ?: ThemeMode.SYSTEM,
             language = p[Keys.LANGUAGE]?.let { runCatching { AppLanguage.valueOf(it) }.getOrNull() } ?: AppLanguage.SYSTEM,
@@ -95,6 +99,7 @@ class SettingsRepository(private val context: Context) {
     }
     suspend fun setOverlayIndicator(enabled: Boolean) = edit { it[Keys.OVERLAY_INDICATOR] = enabled }
     suspend fun setNotifyNormal(enabled: Boolean) = edit { it[Keys.NOTIFY_NORMAL] = enabled }
+    suspend fun setAlertOnSensorUse(enabled: Boolean) = edit { it[Keys.ALERT_SENSOR_USE] = enabled }
     suspend fun setIncludeSystemApps(enabled: Boolean) = edit { it[Keys.INCLUDE_SYSTEM] = enabled }
     suspend fun setTheme(mode: ThemeMode) = edit { it[Keys.THEME] = mode.name }
     suspend fun setLanguage(lang: AppLanguage) = edit { it[Keys.LANGUAGE] = lang.name }

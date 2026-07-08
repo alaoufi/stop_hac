@@ -42,6 +42,9 @@ class SettingsViewModel(private val container: AppContainer) : ViewModel() {
     fun setNotifyNormal(enabled: Boolean) =
         viewModelScope.launch { container.settings.setNotifyNormal(enabled) }
 
+    fun setAlertOnSensorUse(enabled: Boolean) =
+        viewModelScope.launch { container.settings.setAlertOnSensorUse(enabled) }
+
     fun setOverlayIndicator(enabled: Boolean) =
         viewModelScope.launch { container.settings.setOverlayIndicator(enabled) }
 

@@ -59,6 +59,7 @@
     <string name="reason_bg_system">%1$s تطبيق نظام يستخدم الـ%2$s بالخلفية — غالباً خدمة نظام.</string>
     <string name="reason_bg_unexpected">استخدم %1$s الـ%2$s بالخلفية بينما لم تكن تستخدمه.</string>
     <string name="reason_perm_granted">حصل %1$s على صلاحية حساسة (%2$s).</string>
+    <string name="reason_intrusion_blocked">⚠️ محاولة اختراق: حاول %1$s استخدام الـ%2$s رغم أنه محظور قصراً. افتحه وأوقفه أو احذفه.</string>
 
     <!-- الرئيسية -->
     <string name="dashboard_security_level">مستوى الأمان الحالي</string>
@@ -248,6 +249,8 @@
     <string name="settings_enable_monitoring_desc">مراقبة وصول الكاميرا والميكروفون والموقع فورياً.</string>
     <string name="settings_start_on_boot">التشغيل عند الإقلاع</string>
     <string name="settings_start_on_boot_desc">استئناف المراقبة تلقائياً بعد إعادة التشغيل.</string>
+    <string name="settings_alert_sensor_use">التنبيه عند استخدام الكاميرا/الميكروفون</string>
+    <string name="settings_alert_sensor_use_desc">احصل على إشعار كلما استخدم أي تطبيق الكاميرا أو الميكروفون، حتى الاستخدام الطبيعي.</string>
     <string name="settings_notify_normal">التنبيه عند الاستخدام الطبيعي</string>
     <string name="settings_notify_normal_desc">إظهار إشعار أيضاً للوصول الطبيعي المتوقع.</string>
     <string name="settings_include_system">تضمين تطبيقات النظام</string>

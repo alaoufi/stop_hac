@@ -59,6 +59,7 @@
     <string name="reason_bg_system">%1$s is a system app using the %2$s in the background — usually a platform service.</string>
     <string name="reason_bg_unexpected">%1$s used the %2$s in the background while you were not using it.</string>
     <string name="reason_perm_granted">%1$s was granted a sensitive permission (%2$s).</string>
+    <string name="reason_intrusion_blocked">⚠️ Intrusion attempt: %1$s tried to use the %2$s while it is force-blocked. Open it and force-stop or uninstall it.</string>
 
     <!-- Dashboard -->
     <string name="dashboard_security_level">Current security level</string>
@@ -248,6 +249,8 @@
     <string name="settings_enable_monitoring_desc">Watch camera, microphone and location access in real time.</string>
     <string name="settings_start_on_boot">Start on boot</string>
     <string name="settings_start_on_boot_desc">Resume monitoring automatically after restart.</string>
+    <string name="settings_alert_sensor_use">Alert on camera/mic use</string>
+    <string name="settings_alert_sensor_use_desc">Get a notification whenever any app uses the camera or microphone, including normal use.</string>
     <string name="settings_notify_normal">Notify on normal use</string>
     <string name="settings_notify_normal_desc">Also show a notice for expected, normal access.</string>
     <string name="settings_include_system">Include system apps</string>

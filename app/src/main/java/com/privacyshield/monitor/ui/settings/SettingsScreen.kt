@@ -76,6 +76,11 @@ fun SettingsScreen(
                         settings.startOnBoot,
                     ) { vm.setStartOnBoot(it) }
                     ToggleRow(
+                        stringResource(R.string.settings_alert_sensor_use),
+                        stringResource(R.string.settings_alert_sensor_use_desc),
+                        settings.alertOnSensorUse,
+                    ) { vm.setAlertOnSensorUse(it) }
+                    ToggleRow(
                         stringResource(R.string.settings_notify_normal),
                         stringResource(R.string.settings_notify_normal_desc),
                         settings.notifyNormal,
