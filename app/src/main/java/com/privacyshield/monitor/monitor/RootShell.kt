@@ -48,6 +48,28 @@ object RootShell {
     suspend fun grant(pkg: String, permission: String): Outcome = run("grant", pkg, permission)
     suspend fun revoke(pkg: String, permission: String): Outcome = run("revoke", pkg, permission)
 
+    /**
+     * Runs an arbitrary shell [script] as root. Used for batched `appops`
+     * commands. The caller is responsible for building [script] only from
+     * trusted, fixed op names and package names it enumerated locally.
+     */
+    suspend fun exec(script: String): Outcome = withContext(Dispatchers.IO) {
+        if (!isRootBinaryPresent()) return@withContext Outcome.NoRoot
+        withTimeoutOrNull(30_000) {
+            try {
+                val process = ProcessBuilder("su", "-c", script)
+                    .redirectErrorStream(true)
+                    .start()
+                val output = process.inputStream.bufferedReader().readText().trim()
+                val code = process.waitFor()
+                if (code == 0) Outcome.Success
+                else Outcome.Failed(if (output.isNotEmpty()) output else "exit $code")
+            } catch (e: Exception) {
+                Outcome.Failed(e.message ?: "error")
+            }
+        } ?: Outcome.Failed("timeout")
+    }
+
     private suspend fun run(op: String, pkg: String, permission: String): Outcome =
         withContext(Dispatchers.IO) {
             if (!isRootBinaryPresent()) return@withContext Outcome.NoRoot

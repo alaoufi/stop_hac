@@ -22,6 +22,7 @@ data class AppSettings(
     val monitoringEnabled: Boolean = true,
     val startOnBoot: Boolean = true,
     val maxProtectionEnabled: Boolean = false,
+    val forceBlockEnabled: Boolean = false,
     val overlayIndicatorEnabled: Boolean = false,
     val notifyNormal: Boolean = false,
     val includeSystemApps: Boolean = false,
@@ -43,6 +44,7 @@ class SettingsRepository(private val context: Context) {
         val MONITORING = booleanPreferencesKey("monitoring_enabled")
         val START_ON_BOOT = booleanPreferencesKey("start_on_boot")
         val MAX_PROTECTION = booleanPreferencesKey("max_protection")
+        val FORCE_BLOCK = booleanPreferencesKey("force_block")
         val OVERLAY_INDICATOR = booleanPreferencesKey("overlay_indicator")
         val NOTIFY_NORMAL = booleanPreferencesKey("notify_normal")
         val INCLUDE_SYSTEM = booleanPreferencesKey("include_system")
@@ -57,6 +59,7 @@ class SettingsRepository(private val context: Context) {
             monitoringEnabled = p[Keys.MONITORING] ?: true,
             startOnBoot = p[Keys.START_ON_BOOT] ?: true,
             maxProtectionEnabled = p[Keys.MAX_PROTECTION] ?: false,
+            forceBlockEnabled = p[Keys.FORCE_BLOCK] ?: false,
             overlayIndicatorEnabled = p[Keys.OVERLAY_INDICATOR] ?: false,
             notifyNormal = p[Keys.NOTIFY_NORMAL] ?: false,
             includeSystemApps = p[Keys.INCLUDE_SYSTEM] ?: false,
@@ -70,6 +73,7 @@ class SettingsRepository(private val context: Context) {
     suspend fun setMonitoring(enabled: Boolean) = edit { it[Keys.MONITORING] = enabled }
     suspend fun setStartOnBoot(enabled: Boolean) = edit { it[Keys.START_ON_BOOT] = enabled }
     suspend fun setMaxProtection(enabled: Boolean) = edit { it[Keys.MAX_PROTECTION] = enabled }
+    suspend fun setForceBlock(enabled: Boolean) = edit { it[Keys.FORCE_BLOCK] = enabled }
     suspend fun setOverlayIndicator(enabled: Boolean) = edit { it[Keys.OVERLAY_INDICATOR] = enabled }
     suspend fun setNotifyNormal(enabled: Boolean) = edit { it[Keys.NOTIFY_NORMAL] = enabled }
     suspend fun setIncludeSystemApps(enabled: Boolean) = edit { it[Keys.INCLUDE_SYSTEM] = enabled }

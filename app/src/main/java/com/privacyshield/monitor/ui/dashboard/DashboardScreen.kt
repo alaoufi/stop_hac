@@ -23,6 +23,7 @@ import androidx.compose.material.icons.filled.Shield
 import androidx.compose.material.icons.filled.Videocam
 import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -56,7 +57,6 @@ import com.privacyshield.monitor.core.model.SensorType
 import com.privacyshield.monitor.monitor.ActiveUse
 import com.privacyshield.monitor.monitor.DeviceState
 import com.privacyshield.monitor.monitor.DeviceStatusProvider
-import com.privacyshield.monitor.monitor.MaxProtectionController
 import com.privacyshield.monitor.monitor.RecentApp
 import com.privacyshield.monitor.monitor.RecentAppsProvider
 import com.privacyshield.monitor.ui.components.AppIcon
@@ -114,8 +114,8 @@ fun DashboardScreen(
                 item { LiveCameraMicAlert(liveCamMic) }
             }
 
-            // Always-visible kill switch to fully cut the sensors via the OS.
-            item { KillSwitchCard() }
+            // Always-visible forced block toggle for the camera & microphone.
+            item { ForceBlockCard(vm, state.forceBlockEnabled) }
 
             if (!state.detectorSupported) {
                 item { DetectorLimitationCard() }
@@ -455,25 +455,31 @@ private fun LiveCameraMicAlert(uses: List<ActiveUse>) {
     }
 }
 
-/** Always-visible control to fully cut power to the camera & microphone. */
+/**
+ * The forced camera/microphone block toggle. On rooted devices it enforces the
+ * block via appops; otherwise it opens the OS global sensor switch. Reflects the
+ * persisted blocked state and states honestly which mechanism is in effect.
+ */
 @Composable
-private fun KillSwitchCard() {
+private fun ForceBlockCard(vm: DashboardViewModel, blocked: Boolean) {
     val context = LocalContext.current
-    val controller = remember { MaxProtectionController(context) }
-    val supported = remember { controller.deviceSupportsSensorToggle() }
+    val rootAvailable = remember { vm.rootAvailable }
+    val container = if (blocked) RiskRed.copy(alpha = 0.18f)
+    else MaterialTheme.colorScheme.errorContainer.copy(alpha = 0.5f)
 
     Card(
         Modifier.fillMaxWidth(),
-        colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.errorContainer.copy(alpha = 0.5f),
-        ),
+        colors = CardDefaults.cardColors(containerColor = container),
     ) {
         Column(Modifier.padding(16.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Icon(Icons.Filled.MicOff, contentDescription = null, tint = RiskRed)
                 Spacer(Modifier.size(10.dp))
                 Text(
-                    stringResource(R.string.dashboard_killswitch_title),
+                    stringResource(
+                        if (blocked) R.string.dashboard_block_on_title
+                        else R.string.dashboard_block_title,
+                    ),
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.Bold,
                 )
@@ -481,23 +487,67 @@ private fun KillSwitchCard() {
             Spacer(Modifier.size(6.dp))
             Text(
                 stringResource(
-                    if (supported) R.string.dashboard_killswitch_supported
-                    else R.string.dashboard_killswitch_generic,
+                    when {
+                        blocked && rootAvailable -> R.string.dashboard_block_on_root
+                        blocked -> R.string.dashboard_block_on_generic
+                        rootAvailable -> R.string.dashboard_block_root
+                        else -> R.string.dashboard_block_generic
+                    },
                 ),
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
             Spacer(Modifier.size(10.dp))
             Button(
-                onClick = { context.startActivity(controller.sensorControlsIntent()) },
+                onClick = {
+                    vm.toggleForceBlock(!blocked) { result ->
+                        handleBlockResult(context, result, blocked)
+                    }
+                },
                 modifier = Modifier.fillMaxWidth(),
+                colors = if (blocked) {
+                    ButtonDefaults.buttonColors()
+                } else {
+                    ButtonDefaults.buttonColors(containerColor = RiskRed)
+                },
             ) {
                 Icon(Icons.Filled.MicOff, contentDescription = null)
                 Spacer(Modifier.size(8.dp))
-                Text(stringResource(R.string.dashboard_killswitch_button))
+                Text(
+                    stringResource(
+                        if (blocked) R.string.dashboard_block_unblock
+                        else R.string.dashboard_block_now,
+                    ),
+                )
             }
         }
     }
+}
+
+private fun handleBlockResult(
+    context: android.content.Context,
+    result: com.privacyshield.monitor.monitor.ForceBlockController.Result,
+    wasBlocked: Boolean,
+) {
+    val msg = when (result) {
+        is com.privacyshield.monitor.monitor.ForceBlockController.Result.Enforced ->
+            context.getString(
+                if (wasBlocked) R.string.dashboard_block_lifted
+                else R.string.dashboard_block_enforced,
+                result.affected,
+            )
+        com.privacyshield.monitor.monitor.ForceBlockController.Result.OpenedSystemToggle -> {
+            context.startActivity(
+                com.privacyshield.monitor.monitor.ForceBlockController(
+                    context, com.privacyshield.monitor.data.repo.AppRepository(context),
+                ).systemSensorToggleIntent(),
+            )
+            context.getString(R.string.dashboard_block_open_system)
+        }
+        is com.privacyshield.monitor.monitor.ForceBlockController.Result.Failed ->
+            context.getString(R.string.dashboard_block_failed, result.message)
+    }
+    android.widget.Toast.makeText(context, msg, android.widget.Toast.LENGTH_LONG).show()
 }
 
 @Composable

@@ -15,6 +15,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
 
 /** Overall protection posture shown prominently on the dashboard. */
 enum class SecurityLevel { HIGH, MEDIUM, LOW }
@@ -23,6 +24,7 @@ data class DashboardUiState(
     val running: Boolean = false,
     val detectorSupported: Boolean = true,
     val maxProtection: Boolean = false,
+    val forceBlockEnabled: Boolean = false,
     val activeUses: List<ActiveUse> = emptyList(),
     val recentEvents: List<SecurityEvent> = emptyList(),
     val suspiciousToday: Int = 0,
@@ -32,9 +34,33 @@ data class DashboardUiState(
 )
 
 @OptIn(ExperimentalCoroutinesApi::class)
-class DashboardViewModel(container: AppContainer) : ViewModel() {
+class DashboardViewModel(private val container: AppContainer) : ViewModel() {
 
     private val now get() = System.currentTimeMillis()
+
+    private val forceBlock = com.privacyshield.monitor.monitor.ForceBlockController(
+        container.appContext,
+        container.appRepository,
+    )
+
+    val rootAvailable: Boolean get() = forceBlock.rootAvailable
+    fun systemSensorToggleIntent() = forceBlock.systemSensorToggleIntent()
+
+    /**
+     * Toggles the forced camera/mic block. Persists the flag, applies the block
+     * via root where possible, and reports the concrete outcome to the caller so
+     * the UI can be honest about what actually happened.
+     */
+    fun toggleForceBlock(
+        enable: Boolean,
+        onResult: (com.privacyshield.monitor.monitor.ForceBlockController.Result) -> Unit,
+    ) {
+        viewModelScope.launch {
+            container.settings.setForceBlock(enable)
+            val result = if (enable) forceBlock.block() else forceBlock.unblock()
+            onResult(result)
+        }
+    }
 
     val state: StateFlow<DashboardUiState> = combine(
         MonitorState.running,
@@ -54,6 +80,7 @@ class DashboardViewModel(container: AppContainer) : ViewModel() {
                 running = running,
                 detectorSupported = supported,
                 maxProtection = settings.maxProtectionEnabled,
+                forceBlockEnabled = settings.forceBlockEnabled,
                 activeUses = active,
                 recentEvents = recent,
                 suspiciousToday = suspicious,
