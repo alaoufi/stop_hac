@@ -17,8 +17,10 @@ import androidx.compose.material.icons.filled.CameraAlt
 import androidx.compose.material.icons.filled.Contactless
 import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.Mic
+import androidx.compose.material.icons.filled.MicOff
 import androidx.compose.material.icons.filled.ScreenShare
 import androidx.compose.material.icons.filled.Shield
+import androidx.compose.material.icons.filled.Videocam
 import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
@@ -45,7 +47,9 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.privacyshield.monitor.R
 import com.privacyshield.monitor.core.model.SensorType
+import com.privacyshield.monitor.monitor.ActiveUse
 import com.privacyshield.monitor.monitor.DeviceStatusProvider
+import com.privacyshield.monitor.monitor.MaxProtectionController
 import com.privacyshield.monitor.ui.components.EventRow
 import com.privacyshield.monitor.ui.components.SectionCard
 import com.privacyshield.monitor.ui.components.StatusTile
@@ -85,6 +89,17 @@ fun DashboardScreen(
         ) {
             item { Spacer(Modifier.size(2.dp)) }
             item { SecurityLevelHeader(state) }
+
+            // Highest-priority: an app is using the camera/mic right now.
+            val liveCamMic = state.activeUses.filter {
+                it.sensor == SensorType.CAMERA || it.sensor == SensorType.MICROPHONE
+            }
+            if (liveCamMic.isNotEmpty()) {
+                item { LiveCameraMicAlert(liveCamMic) }
+            }
+
+            // Always-visible kill switch to fully cut the sensors via the OS.
+            item { KillSwitchCard() }
 
             if (!state.detectorSupported) {
                 item { DetectorLimitationCard() }
@@ -248,6 +263,93 @@ private fun CountPill(emoji: String, count: Int, color: Color) {
             fontWeight = FontWeight.Bold,
             color = color,
         )
+    }
+}
+
+/** Prominent, real-time banner naming any app using the camera/mic right now. */
+@Composable
+private fun LiveCameraMicAlert(uses: List<ActiveUse>) {
+    Card(
+        Modifier.fillMaxWidth(),
+        colors = CardDefaults.cardColors(containerColor = RiskRed.copy(alpha = 0.15f)),
+    ) {
+        Column(Modifier.padding(16.dp)) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Icon(Icons.Filled.Warning, contentDescription = null, tint = RiskRed)
+                Spacer(Modifier.size(10.dp))
+                Text(
+                    stringResource(R.string.dashboard_live_alert_title),
+                    style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.Bold,
+                    color = RiskRed,
+                )
+            }
+            Spacer(Modifier.size(8.dp))
+            uses.forEach { use ->
+                Row(
+                    Modifier.padding(vertical = 4.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    Icon(
+                        if (use.sensor == SensorType.CAMERA) Icons.Filled.Videocam else Icons.Filled.Mic,
+                        contentDescription = null,
+                        tint = RiskRed,
+                        modifier = Modifier.size(20.dp),
+                    )
+                    Spacer(Modifier.size(8.dp))
+                    Text(
+                        use.appLabel,
+                        style = MaterialTheme.typography.bodyLarge,
+                        fontWeight = FontWeight.SemiBold,
+                    )
+                }
+            }
+        }
+    }
+}
+
+/** Always-visible control to fully cut power to the camera & microphone. */
+@Composable
+private fun KillSwitchCard() {
+    val context = LocalContext.current
+    val controller = remember { MaxProtectionController(context) }
+    val supported = remember { controller.deviceSupportsSensorToggle() }
+
+    Card(
+        Modifier.fillMaxWidth(),
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.errorContainer.copy(alpha = 0.5f),
+        ),
+    ) {
+        Column(Modifier.padding(16.dp)) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Icon(Icons.Filled.MicOff, contentDescription = null, tint = RiskRed)
+                Spacer(Modifier.size(10.dp))
+                Text(
+                    stringResource(R.string.dashboard_killswitch_title),
+                    style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.Bold,
+                )
+            }
+            Spacer(Modifier.size(6.dp))
+            Text(
+                stringResource(
+                    if (supported) R.string.dashboard_killswitch_supported
+                    else R.string.dashboard_killswitch_generic,
+                ),
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+            )
+            Spacer(Modifier.size(10.dp))
+            Button(
+                onClick = { context.startActivity(controller.sensorControlsIntent()) },
+                modifier = Modifier.fillMaxWidth(),
+            ) {
+                Icon(Icons.Filled.MicOff, contentDescription = null)
+                Spacer(Modifier.size(8.dp))
+                Text(stringResource(R.string.dashboard_killswitch_button))
+            }
+        }
     }
 }
 

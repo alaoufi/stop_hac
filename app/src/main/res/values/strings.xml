@@ -67,6 +67,11 @@
     <string name="dashboard_no_events">No events recorded yet.</string>
     <string name="dashboard_monitoring_paused">Monitoring is paused.</string>
     <string name="dashboard_detector_unsupported">Real-time detection is unavailable on this device or Android version. The app still monitors permissions and shows the state it can read.</string>
+    <string name="dashboard_live_alert_title">In use right now</string>
+    <string name="dashboard_killswitch_title">Turn off camera &amp; microphone</string>
+    <string name="dashboard_killswitch_supported">This device has global sensor switches that cut power to the camera and microphone for every app. Tap to open them.</string>
+    <string name="dashboard_killswitch_generic">Open the system privacy controls to disable sensors and review which apps can use them.</string>
+    <string name="dashboard_killswitch_button">Open sensor controls</string>
     <string name="level_high">High</string>
     <string name="level_high_desc">No suspicious activity detected recently.</string>
     <string name="level_medium">Medium</string>

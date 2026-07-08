@@ -67,6 +67,11 @@
     <string name="dashboard_no_events">لا توجد أحداث مسجلة بعد.</string>
     <string name="dashboard_monitoring_paused">المراقبة متوقفة مؤقتاً.</string>
     <string name="dashboard_detector_unsupported">الكشف الفوري غير متاح على هذا الجهاز أو إصدار أندرويد. يستمر التطبيق في مراقبة الصلاحيات وعرض ما يستطيع قراءته من حالات.</string>
+    <string name="dashboard_live_alert_title">قيد الاستخدام الآن</string>
+    <string name="dashboard_killswitch_title">إيقاف الكاميرا والميكروفون</string>
+    <string name="dashboard_killswitch_supported">هذا الجهاز يملك مفاتيح عامة للمستشعرات تقطع الطاقة عن الكاميرا والميكروفون لكل التطبيقات. اضغط لفتحها.</string>
+    <string name="dashboard_killswitch_generic">افتح أدوات خصوصية النظام لتعطيل المستشعرات ومراجعة التطبيقات التي يمكنها استخدامها.</string>
+    <string name="dashboard_killswitch_button">فتح أدوات المستشعرات</string>
     <string name="level_high">مرتفع</string>
     <string name="level_high_desc">لم يُكتشف أي نشاط مريب مؤخراً.</string>
     <string name="level_medium">متوسط</string>
