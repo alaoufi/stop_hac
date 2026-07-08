@@ -85,6 +85,12 @@
     <string name="dashboard_block_lifted">تم فكّ الحظر — استُعيد %1$d تطبيقاً.</string>
     <string name="dashboard_block_open_system">فُتح مفتاح مستشعرات النظام — فعّله لفرض الحظر.</string>
     <string name="dashboard_block_failed">تعذّر الفرض: %1$s</string>
+    <string name="dashboard_block_locked_note">🔒 فكّ الحظر يتطلب بصمتك أو رقمك السري.</string>
+    <string name="block_auth_title">تأكيد هويتك</string>
+    <string name="block_auth_subtitle">صادِق لفكّ حظر الكاميرا والميكروفون.</string>
+    <string name="settings_block_lock">قفل فكّ الحظر</string>
+    <string name="settings_block_lock_desc">اطلب بصمتك / وجهك / رقمك السري لفكّ الحظر القصري، حتى لا يستطيع أحد غيرك إيقاف الحماية.</string>
+    <string name="settings_block_lock_unavailable">فعّل قفل الشاشة (رقم سري أو نمط أو بصمة) أولاً.</string>
     <string name="dashboard_background_apps">التطبيقات النشطة مؤخراً</string>
     <string name="dashboard_background_none">لم يُكتشف نشاط حديث للتطبيقات.</string>
     <string name="dashboard_last_active">آخر نشاط %1$s</string>
@@ -235,6 +241,11 @@
     <string name="settings_system_sensor_controls">أدوات مستشعرات النظام</string>
     <string name="settings_sensor_toggle_supported">هذا الجهاز يملك مفاتيح عامة للكاميرا/الميكروفون. افتح أدوات الخصوصية.</string>
     <string name="settings_sensor_toggle_unsupported">افتح أدوات خصوصية النظام لمراجعة وصول المستشعرات.</string>
+    <string name="settings_schedule">جدولة الحظر التلقائي</string>
+    <string name="settings_schedule_enable">الحظر حسب جدول</string>
+    <string name="settings_schedule_desc">حظر الكاميرا والميكروفون قصراً تلقائياً خلال فترة يومية (مثلاً أثناء الليل).</string>
+    <string name="settings_schedule_start">الحظر من</string>
+    <string name="settings_schedule_end">فكّ الحظر عند</string>
     <string name="settings_appearance">المظهر</string>
     <string name="settings_theme">السمة</string>
     <string name="theme_system">النظام</string>

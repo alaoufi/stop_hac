@@ -96,6 +96,21 @@ fun SettingsScreen(
                         settings.maxProtectionEnabled,
                     ) { vm.setMaxProtection(it) }
                     ToggleRow(
+                        stringResource(R.string.settings_block_lock),
+                        stringResource(R.string.settings_block_lock_desc),
+                        settings.blockLockEnabled,
+                    ) { enabled ->
+                        if (enabled && !vm.canAuthenticate()) {
+                            android.widget.Toast.makeText(
+                                context,
+                                context.getString(R.string.settings_block_lock_unavailable),
+                                android.widget.Toast.LENGTH_LONG,
+                            ).show()
+                        } else {
+                            vm.setBlockLock(enabled)
+                        }
+                    }
+                    ToggleRow(
                         stringResource(R.string.settings_overlay_indicator),
                         stringResource(R.string.settings_overlay_indicator_desc),
                         settings.overlayIndicatorEnabled,
@@ -130,6 +145,30 @@ fun SettingsScreen(
                             )
                         }
                         Icon(Icons.Filled.ChevronRight, contentDescription = null)
+                    }
+                }
+            }
+
+            SectionCard(title = stringResource(R.string.settings_schedule)) {
+                Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                    ToggleRow(
+                        stringResource(R.string.settings_schedule_enable),
+                        stringResource(R.string.settings_schedule_desc),
+                        settings.scheduleEnabled,
+                    ) { enabled ->
+                        vm.setSchedule(enabled, settings.scheduleStartMinutes, settings.scheduleEndMinutes)
+                    }
+                    TimeRow(
+                        label = stringResource(R.string.settings_schedule_start),
+                        minutes = settings.scheduleStartMinutes,
+                    ) { picked ->
+                        vm.setSchedule(settings.scheduleEnabled, picked, settings.scheduleEndMinutes)
+                    }
+                    TimeRow(
+                        label = stringResource(R.string.settings_schedule_end),
+                        minutes = settings.scheduleEndMinutes,
+                    ) { picked ->
+                        vm.setSchedule(settings.scheduleEnabled, settings.scheduleStartMinutes, picked)
                     }
                 }
             }
@@ -200,6 +239,31 @@ fun SettingsScreen(
             dismissButton = { TextButton(onClick = { confirmClear = false }) { Text(stringResource(R.string.action_cancel)) } },
             title = { Text(stringResource(R.string.settings_clear_history)) },
             text = { Text(stringResource(R.string.settings_clear_confirm)) },
+        )
+    }
+}
+
+@Composable
+private fun TimeRow(label: String, minutes: Int, onPicked: (Int) -> Unit) {
+    val context = LocalContext.current
+    Row(
+        Modifier
+            .fillMaxWidth()
+            .clickable {
+                android.app.TimePickerDialog(
+                    context,
+                    { _, h, m -> onPicked(h * 60 + m) },
+                    minutes / 60, minutes % 60, true,
+                ).show()
+            }
+            .padding(vertical = 10.dp),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Text(label, Modifier.weight(1f), fontWeight = FontWeight.Medium)
+        Text(
+            "%02d:%02d".format(minutes / 60, minutes % 60),
+            style = MaterialTheme.typography.titleMedium,
+            color = MaterialTheme.colorScheme.primary,
         )
     }
 }

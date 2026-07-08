@@ -115,7 +115,7 @@ fun DashboardScreen(
             }
 
             // Always-visible forced block toggle for the camera & microphone.
-            item { ForceBlockCard(vm, state.forceBlockEnabled) }
+            item { ForceBlockCard(vm, state.forceBlockEnabled, state.blockLockEnabled) }
 
             if (!state.detectorSupported) {
                 item { DetectorLimitationCard() }
@@ -461,9 +461,33 @@ private fun LiveCameraMicAlert(uses: List<ActiveUse>) {
  * persisted blocked state and states honestly which mechanism is in effect.
  */
 @Composable
-private fun ForceBlockCard(vm: DashboardViewModel, blocked: Boolean) {
+private fun ForceBlockCard(vm: DashboardViewModel, blocked: Boolean, lockEnabled: Boolean) {
     val context = LocalContext.current
     val rootAvailable = remember { vm.rootAvailable }
+    val unblockTitle = stringResource(R.string.block_auth_title)
+    val unblockSubtitle = stringResource(R.string.block_auth_subtitle)
+
+    fun performToggle(enable: Boolean) {
+        vm.toggleForceBlock(enable) { result -> handleBlockResult(context, result, blocked) }
+    }
+
+    // Lifting the block can require authentication; enabling never does.
+    fun onToggleRequested() {
+        val activity = context as? androidx.fragment.app.FragmentActivity
+        val mustAuth = blocked && lockEnabled && activity != null &&
+            com.privacyshield.monitor.ui.BiometricGate.canAuthenticate(context)
+        if (mustAuth) {
+            com.privacyshield.monitor.ui.BiometricGate.authenticate(
+                activity = activity!!,
+                title = unblockTitle,
+                subtitle = unblockSubtitle,
+                onSuccess = { performToggle(false) },
+                onFailure = { /* keep the block in place */ },
+            )
+        } else {
+            performToggle(!blocked)
+        }
+    }
     val container = if (blocked) RiskRed.copy(alpha = 0.18f)
     else MaterialTheme.colorScheme.errorContainer.copy(alpha = 0.5f)
 
@@ -499,11 +523,7 @@ private fun ForceBlockCard(vm: DashboardViewModel, blocked: Boolean) {
             )
             Spacer(Modifier.size(10.dp))
             Button(
-                onClick = {
-                    vm.toggleForceBlock(!blocked) { result ->
-                        handleBlockResult(context, result, blocked)
-                    }
-                },
+                onClick = { onToggleRequested() },
                 modifier = Modifier.fillMaxWidth(),
                 colors = if (blocked) {
                     ButtonDefaults.buttonColors()
@@ -518,6 +538,14 @@ private fun ForceBlockCard(vm: DashboardViewModel, blocked: Boolean) {
                         if (blocked) R.string.dashboard_block_unblock
                         else R.string.dashboard_block_now,
                     ),
+                )
+            }
+            if (blocked && lockEnabled) {
+                Spacer(Modifier.size(6.dp))
+                Text(
+                    stringResource(R.string.dashboard_block_locked_note),
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
             }
         }

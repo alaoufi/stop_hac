@@ -70,6 +70,10 @@
         </service>
 
         <receiver
+            android:name=".monitor.ScheduleReceiver"
+            android:exported="false" />
+
+        <receiver
             android:name=".monitor.BootReceiver"
             android:exported="true">
             <intent-filter>

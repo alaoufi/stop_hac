@@ -27,6 +27,12 @@ class BootReceiver : BroadcastReceiver() {
                 if (settings.startOnBoot && settings.monitoringEnabled) {
                     MonitorService.start(context)
                 }
+                if (settings.scheduleEnabled) {
+                    BlockScheduler(context).schedule(
+                        settings.scheduleStartMinutes,
+                        settings.scheduleEndMinutes,
+                    )
+                }
                 PeriodicScanWorker.schedule(context)
             } finally {
                 pending.finish()

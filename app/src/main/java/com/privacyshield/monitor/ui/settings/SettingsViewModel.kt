@@ -45,6 +45,22 @@ class SettingsViewModel(private val container: AppContainer) : ViewModel() {
     fun setOverlayIndicator(enabled: Boolean) =
         viewModelScope.launch { container.settings.setOverlayIndicator(enabled) }
 
+    fun setBlockLock(enabled: Boolean) =
+        viewModelScope.launch { container.settings.setBlockLock(enabled) }
+
+    private val scheduler = com.privacyshield.monitor.monitor.BlockScheduler(container.appContext)
+
+    /** Persists the auto-block schedule and (re)arms or cancels the alarms. */
+    fun setSchedule(enabled: Boolean, startMinutes: Int, endMinutes: Int) {
+        viewModelScope.launch {
+            container.settings.setSchedule(enabled, startMinutes, endMinutes)
+            if (enabled) scheduler.schedule(startMinutes, endMinutes) else scheduler.cancel()
+        }
+    }
+
+    fun canAuthenticate(): Boolean =
+        com.privacyshield.monitor.ui.BiometricGate.canAuthenticate(container.appContext)
+
     /** True when the "display over other apps" permission is already granted. */
     fun canDrawOverlay(): Boolean = android.provider.Settings.canDrawOverlays(container.appContext)
 

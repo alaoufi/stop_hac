@@ -23,6 +23,11 @@ data class AppSettings(
     val startOnBoot: Boolean = true,
     val maxProtectionEnabled: Boolean = false,
     val forceBlockEnabled: Boolean = false,
+    val blockLockEnabled: Boolean = false,
+    val scheduleEnabled: Boolean = false,
+    /** Daily auto-block window, in minutes-of-day (default 22:00–07:00). */
+    val scheduleStartMinutes: Int = 22 * 60,
+    val scheduleEndMinutes: Int = 7 * 60,
     val overlayIndicatorEnabled: Boolean = false,
     val notifyNormal: Boolean = false,
     val includeSystemApps: Boolean = false,
@@ -45,6 +50,10 @@ class SettingsRepository(private val context: Context) {
         val START_ON_BOOT = booleanPreferencesKey("start_on_boot")
         val MAX_PROTECTION = booleanPreferencesKey("max_protection")
         val FORCE_BLOCK = booleanPreferencesKey("force_block")
+        val BLOCK_LOCK = booleanPreferencesKey("block_lock")
+        val SCHEDULE_ENABLED = booleanPreferencesKey("schedule_enabled")
+        val SCHEDULE_START = stringPreferencesKey("schedule_start")
+        val SCHEDULE_END = stringPreferencesKey("schedule_end")
         val OVERLAY_INDICATOR = booleanPreferencesKey("overlay_indicator")
         val NOTIFY_NORMAL = booleanPreferencesKey("notify_normal")
         val INCLUDE_SYSTEM = booleanPreferencesKey("include_system")
@@ -60,6 +69,10 @@ class SettingsRepository(private val context: Context) {
             startOnBoot = p[Keys.START_ON_BOOT] ?: true,
             maxProtectionEnabled = p[Keys.MAX_PROTECTION] ?: false,
             forceBlockEnabled = p[Keys.FORCE_BLOCK] ?: false,
+            blockLockEnabled = p[Keys.BLOCK_LOCK] ?: false,
+            scheduleEnabled = p[Keys.SCHEDULE_ENABLED] ?: false,
+            scheduleStartMinutes = p[Keys.SCHEDULE_START]?.toIntOrNull() ?: (22 * 60),
+            scheduleEndMinutes = p[Keys.SCHEDULE_END]?.toIntOrNull() ?: (7 * 60),
             overlayIndicatorEnabled = p[Keys.OVERLAY_INDICATOR] ?: false,
             notifyNormal = p[Keys.NOTIFY_NORMAL] ?: false,
             includeSystemApps = p[Keys.INCLUDE_SYSTEM] ?: false,
@@ -74,6 +87,12 @@ class SettingsRepository(private val context: Context) {
     suspend fun setStartOnBoot(enabled: Boolean) = edit { it[Keys.START_ON_BOOT] = enabled }
     suspend fun setMaxProtection(enabled: Boolean) = edit { it[Keys.MAX_PROTECTION] = enabled }
     suspend fun setForceBlock(enabled: Boolean) = edit { it[Keys.FORCE_BLOCK] = enabled }
+    suspend fun setBlockLock(enabled: Boolean) = edit { it[Keys.BLOCK_LOCK] = enabled }
+    suspend fun setSchedule(enabled: Boolean, startMinutes: Int, endMinutes: Int) = edit {
+        it[Keys.SCHEDULE_ENABLED] = enabled
+        it[Keys.SCHEDULE_START] = startMinutes.toString()
+        it[Keys.SCHEDULE_END] = endMinutes.toString()
+    }
     suspend fun setOverlayIndicator(enabled: Boolean) = edit { it[Keys.OVERLAY_INDICATOR] = enabled }
     suspend fun setNotifyNormal(enabled: Boolean) = edit { it[Keys.NOTIFY_NORMAL] = enabled }
     suspend fun setIncludeSystemApps(enabled: Boolean) = edit { it[Keys.INCLUDE_SYSTEM] = enabled }

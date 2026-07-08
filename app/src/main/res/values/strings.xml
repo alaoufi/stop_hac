@@ -85,6 +85,12 @@
     <string name="dashboard_block_lifted">Unblocked — restored %1$d apps.</string>
     <string name="dashboard_block_open_system">Opened the system sensor switch — turn it on to enforce.</string>
     <string name="dashboard_block_failed">Could not enforce: %1$s</string>
+    <string name="dashboard_block_locked_note">🔒 Unlocking requires your fingerprint or PIN.</string>
+    <string name="block_auth_title">Confirm it\'s you</string>
+    <string name="block_auth_subtitle">Authenticate to unblock the camera &amp; microphone.</string>
+    <string name="settings_block_lock">Lock unblocking</string>
+    <string name="settings_block_lock_desc">Require your fingerprint / face / PIN to lift the forced block, so no one else can turn protection off.</string>
+    <string name="settings_block_lock_unavailable">Set up a screen lock (PIN, pattern or biometric) first.</string>
     <string name="dashboard_background_apps">Recently active apps</string>
     <string name="dashboard_background_none">No recent app activity detected.</string>
     <string name="dashboard_last_active">Last active %1$s</string>
@@ -235,6 +241,11 @@
     <string name="settings_system_sensor_controls">System sensor controls</string>
     <string name="settings_sensor_toggle_supported">This device has global camera/microphone switches. Open privacy controls.</string>
     <string name="settings_sensor_toggle_unsupported">Open the system privacy controls to review sensor access.</string>
+    <string name="settings_schedule">Auto-block schedule</string>
+    <string name="settings_schedule_enable">Block on a schedule</string>
+    <string name="settings_schedule_desc">Automatically force-block the camera &amp; microphone during a daily window (e.g. overnight).</string>
+    <string name="settings_schedule_start">Block from</string>
+    <string name="settings_schedule_end">Unblock at</string>
     <string name="settings_appearance">Appearance</string>
     <string name="settings_theme">Theme</string>
     <string name="theme_system">System</string>
