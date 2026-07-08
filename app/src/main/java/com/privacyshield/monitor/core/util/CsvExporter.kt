@@ -34,10 +34,19 @@ object CsvExporter {
         return sb.toString()
     }
 
-    private fun escape(value: String): String =
-        if (value.contains(',') || value.contains('"') || value.contains('\n')) {
-            "\"" + value.replace("\"", "\"\"") + "\""
+    // Characters a spreadsheet treats as the start of a formula. App labels come
+    // from other apps' manifests and are fully attacker-controlled, so a label
+    // like "=HYPERLINK(...)" must never be emitted as a live formula.
+    private val formulaTriggers = charArrayOf('=', '+', '-', '@', '\t', '\r')
+
+    private fun escape(value: String): String {
+        // Neutralize formula injection: a leading trigger char is defused by a
+        // prefixed apostrophe, which spreadsheets treat as "literal text".
+        val defused = if (value.isNotEmpty() && value[0] in formulaTriggers) "'$value" else value
+        return if (defused.contains(',') || defused.contains('"') || defused.contains('\n')) {
+            "\"" + defused.replace("\"", "\"\"") + "\""
         } else {
-            value
+            defused
         }
+    }
 }
