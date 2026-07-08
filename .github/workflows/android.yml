@@ -9,6 +9,11 @@ on:
 permissions:
   contents: read
 
+# Only keep the latest run per ref to avoid piling up duplicate builds.
+concurrency:
+  group: android-ci-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -21,9 +26,15 @@ jobs:
         with:
           distribution: temurin
           java-version: "17"
+          cache: gradle
 
       - name: Set up Android SDK
         uses: android-actions/setup-android@v3
+        with:
+          # Skip the deprecated legacy "tools" package — its download is flaky
+          # ("unknown archive") and the Gradle build does not need it. AGP pulls
+          # the required platform/build-tools itself via the accepted licenses.
+          packages: "platform-tools"
 
       - name: Grant execute permission for gradlew
         run: chmod +x ./gradlew
