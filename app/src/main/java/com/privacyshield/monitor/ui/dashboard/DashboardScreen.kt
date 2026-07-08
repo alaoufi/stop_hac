@@ -34,6 +34,7 @@ import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -45,11 +46,19 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.withContext
 import com.privacyshield.monitor.R
 import com.privacyshield.monitor.core.model.SensorType
 import com.privacyshield.monitor.monitor.ActiveUse
+import com.privacyshield.monitor.monitor.DeviceState
 import com.privacyshield.monitor.monitor.DeviceStatusProvider
 import com.privacyshield.monitor.monitor.MaxProtectionController
+import com.privacyshield.monitor.monitor.RecentApp
+import com.privacyshield.monitor.monitor.RecentAppsProvider
+import com.privacyshield.monitor.ui.components.AppIcon
+import com.privacyshield.monitor.ui.formatClock
 import com.privacyshield.monitor.ui.components.EventRow
 import com.privacyshield.monitor.ui.components.SectionCard
 import com.privacyshield.monitor.ui.components.StatusTile
@@ -68,6 +77,7 @@ fun DashboardScreen(
     val state by vm.state.collectAsStateWithLifecycle()
     val context = LocalContext.current
     val deviceStatus = remember { DeviceStatusProvider(context) }
+    val deviceState = remember { DeviceState(context) }
 
     Scaffold(
         topBar = {
@@ -106,6 +116,8 @@ fun DashboardScreen(
             }
 
             item { SensorStatusGrid(state, deviceStatus) }
+
+            item { BackgroundAppsSection(deviceState) }
 
             item {
                 TodaySummary(
@@ -263,6 +275,123 @@ private fun CountPill(emoji: String, count: Int, color: Color) {
             fontWeight = FontWeight.Bold,
             color = color,
         )
+    }
+}
+
+/** Snapshot for the background-apps section: access state + the recent list. */
+private data class BgAppsState(val granted: Boolean, val apps: List<RecentApp>)
+
+/**
+ * Shows recently-active apps (foreground/background) via Usage Access, or a
+ * prompt to grant it. Refreshes every few seconds while visible.
+ */
+@Composable
+private fun BackgroundAppsSection(deviceState: DeviceState) {
+    val context = LocalContext.current
+    val provider = remember { RecentAppsProvider(context) }
+
+    val snapshot by produceState(BgAppsState(deviceState.hasUsageAccess(), emptyList())) {
+        while (true) {
+            val granted = deviceState.hasUsageAccess()
+            val apps = if (granted) {
+                withContext(Dispatchers.IO) { provider.recentApps() }
+            } else {
+                emptyList()
+            }
+            value = BgAppsState(granted, apps)
+            delay(5_000)
+        }
+    }
+
+    if (!snapshot.granted) {
+        UsageAccessCard()
+        return
+    }
+
+    SectionCard(title = stringResource(R.string.dashboard_background_apps)) {
+        if (snapshot.apps.isEmpty()) {
+            Text(
+                stringResource(R.string.dashboard_background_none),
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+            )
+        } else {
+            Column {
+                snapshot.apps.forEach { app -> RecentAppRow(app) }
+            }
+        }
+    }
+}
+
+@Composable
+private fun RecentAppRow(app: RecentApp) {
+    Row(
+        Modifier.fillMaxWidth().padding(vertical = 6.dp),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        AppIcon(app.packageName, Modifier.size(36.dp))
+        Spacer(Modifier.size(12.dp))
+        Column(Modifier.weight(1f)) {
+            Text(
+                appLabelFor(app.packageName),
+                style = MaterialTheme.typography.bodyLarge,
+                fontWeight = FontWeight.Medium,
+                maxLines = 1,
+            )
+            Text(
+                stringResource(R.string.dashboard_last_active, formatClock(app.lastActiveMillis)),
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+            )
+        }
+        Text(
+            stringResource(
+                if (app.foreground) R.string.status_in_use else R.string.status_background,
+            ),
+            style = MaterialTheme.typography.labelMedium,
+            color = if (app.foreground) RiskAmber else MaterialTheme.colorScheme.onSurfaceVariant,
+        )
+    }
+}
+
+@Composable
+private fun appLabelFor(packageName: String): String {
+    val context = LocalContext.current
+    return remember(packageName) {
+        runCatching {
+            val pm = context.packageManager
+            pm.getApplicationLabel(pm.getApplicationInfo(packageName, 0)).toString()
+        }.getOrDefault(packageName)
+    }
+}
+
+@Composable
+private fun UsageAccessCard() {
+    val context = LocalContext.current
+    Card(
+        Modifier.fillMaxWidth(),
+        colors = CardDefaults.cardColors(containerColor = RiskAmber.copy(alpha = 0.15f)),
+    ) {
+        Column(Modifier.padding(16.dp)) {
+            Text(
+                stringResource(R.string.dashboard_usage_access_title),
+                style = MaterialTheme.typography.titleMedium,
+                fontWeight = FontWeight.Bold,
+            )
+            Spacer(Modifier.size(6.dp))
+            Text(
+                stringResource(R.string.dashboard_usage_access_body),
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+            )
+            Spacer(Modifier.size(10.dp))
+            Button(
+                onClick = { context.startActivity(RecentAppsProvider.usageAccessIntent()) },
+                modifier = Modifier.fillMaxWidth(),
+            ) {
+                Text(stringResource(R.string.dashboard_usage_access_button))
+            }
+        }
     }
 }
 

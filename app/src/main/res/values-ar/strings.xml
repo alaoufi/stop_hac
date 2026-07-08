@@ -72,6 +72,13 @@
     <string name="dashboard_killswitch_supported">هذا الجهاز يملك مفاتيح عامة للمستشعرات تقطع الطاقة عن الكاميرا والميكروفون لكل التطبيقات. اضغط لفتحها.</string>
     <string name="dashboard_killswitch_generic">افتح أدوات خصوصية النظام لتعطيل المستشعرات ومراجعة التطبيقات التي يمكنها استخدامها.</string>
     <string name="dashboard_killswitch_button">فتح أدوات المستشعرات</string>
+    <string name="dashboard_background_apps">التطبيقات النشطة مؤخراً</string>
+    <string name="dashboard_background_none">لم يُكتشف نشاط حديث للتطبيقات.</string>
+    <string name="dashboard_last_active">آخر نشاط %1$s</string>
+    <string name="status_background">بالخلفية</string>
+    <string name="dashboard_usage_access_title">تفعيل الكشف الدقيق</string>
+    <string name="dashboard_usage_access_body">امنح إذن «الوصول للاستخدام» ليتمكن التطبيق من معرفة ما إذا كان التطبيق الذي يستخدم الكاميرا أو الميكروفون مفتوحاً على الشاشة أم مخفياً بالخلفية — وليعرض التطبيقات النشطة مؤخراً. يبقى هذا على جهازك.</string>
+    <string name="dashboard_usage_access_button">منح إذن الوصول للاستخدام</string>
     <string name="level_high">مرتفع</string>
     <string name="level_high_desc">لم يُكتشف أي نشاط مريب مؤخراً.</string>
     <string name="level_medium">متوسط</string>

@@ -72,6 +72,13 @@
     <string name="dashboard_killswitch_supported">This device has global sensor switches that cut power to the camera and microphone for every app. Tap to open them.</string>
     <string name="dashboard_killswitch_generic">Open the system privacy controls to disable sensors and review which apps can use them.</string>
     <string name="dashboard_killswitch_button">Open sensor controls</string>
+    <string name="dashboard_background_apps">Recently active apps</string>
+    <string name="dashboard_background_none">No recent app activity detected.</string>
+    <string name="dashboard_last_active">Last active %1$s</string>
+    <string name="status_background">Background</string>
+    <string name="dashboard_usage_access_title">Enable accurate detection</string>
+    <string name="dashboard_usage_access_body">Grant \"Usage access\" so the app can tell whether an app using your camera or microphone is open on screen or hidden in the background — and list recently active apps. This stays on your device.</string>
+    <string name="dashboard_usage_access_button">Grant usage access</string>
     <string name="level_high">High</string>
     <string name="level_high_desc">No suspicious activity detected recently.</string>
     <string name="level_medium">Medium</string>
