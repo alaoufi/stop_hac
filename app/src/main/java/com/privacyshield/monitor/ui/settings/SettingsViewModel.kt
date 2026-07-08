@@ -42,6 +42,17 @@ class SettingsViewModel(private val container: AppContainer) : ViewModel() {
     fun setNotifyNormal(enabled: Boolean) =
         viewModelScope.launch { container.settings.setNotifyNormal(enabled) }
 
+    fun setOverlayIndicator(enabled: Boolean) =
+        viewModelScope.launch { container.settings.setOverlayIndicator(enabled) }
+
+    /** True when the "display over other apps" permission is already granted. */
+    fun canDrawOverlay(): Boolean = android.provider.Settings.canDrawOverlays(container.appContext)
+
+    fun overlayPermissionIntent() = android.content.Intent(
+        android.provider.Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
+        android.net.Uri.parse("package:${container.appContext.packageName}"),
+    ).addFlags(android.content.Intent.FLAG_ACTIVITY_NEW_TASK)
+
     fun setIncludeSystemApps(enabled: Boolean) =
         viewModelScope.launch { container.settings.setIncludeSystemApps(enabled) }
 

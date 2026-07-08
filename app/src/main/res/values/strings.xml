@@ -87,6 +87,15 @@
     <string name="sheet_force_stop_hint">Opens the system App info screen — tap \"Force stop\" there. Android does not let another app stop it silently.</string>
     <string name="sheet_uninstall">Uninstall permanently</string>
     <string name="sheet_app_info">App info &amp; permissions</string>
+    <string name="sheet_permissions">Permissions</string>
+    <string name="sheet_perm_root_mode">Root detected — changes are applied directly and instantly.</string>
+    <string name="sheet_perm_settings_mode">Without root, Android only lets you change these in system settings — the button opens the exact screen.</string>
+    <string name="sheet_perm_grant">Allow</string>
+    <string name="sheet_perm_revoke">Deny</string>
+    <string name="sheet_perm_done">Permission updated.</string>
+    <string name="sheet_perm_no_root">Root is not available on this device.</string>
+    <string name="sheet_perm_failed">Could not change it: %1$s</string>
+    <string name="sheet_perm_confirm_in_settings">Confirm the change on the permission screen that just opened.</string>
 
     <!-- Apps screen -->
     <string name="apps_title">Apps &amp; background activity</string>
@@ -209,6 +218,8 @@
     <string name="settings_include_system_desc">Also monitor and list built-in system apps.</string>
     <string name="settings_max_protection">Maximum Protection</string>
     <string name="settings_max_protection_desc">Surface every access and alert aggressively. Android does not let an app switch off another app\'s sensors, so use the system controls below to actually cut power to them.</string>
+    <string name="settings_overlay_indicator">Floating privacy indicator</string>
+    <string name="settings_overlay_indicator_desc">Show a small dot over the screen whenever the camera (green) or microphone (orange) is in use by any app — even a hidden one. Needs the \"display over other apps\" permission.</string>
     <string name="settings_system_sensor_controls">System sensor controls</string>
     <string name="settings_sensor_toggle_supported">This device has global camera/microphone switches. Open privacy controls.</string>
     <string name="settings_sensor_toggle_unsupported">Open the system privacy controls to review sensor access.</string>

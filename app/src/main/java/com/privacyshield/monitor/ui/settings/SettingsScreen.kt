@@ -95,6 +95,16 @@ fun SettingsScreen(
                         stringResource(R.string.settings_max_protection_desc),
                         settings.maxProtectionEnabled,
                     ) { vm.setMaxProtection(it) }
+                    ToggleRow(
+                        stringResource(R.string.settings_overlay_indicator),
+                        stringResource(R.string.settings_overlay_indicator_desc),
+                        settings.overlayIndicatorEnabled,
+                    ) { enabled ->
+                        if (enabled && !vm.canDrawOverlay()) {
+                            context.startActivity(vm.overlayPermissionIntent())
+                        }
+                        vm.setOverlayIndicator(enabled)
+                    }
                     Spacer(Modifier.size(8.dp))
                     Row(
                         Modifier

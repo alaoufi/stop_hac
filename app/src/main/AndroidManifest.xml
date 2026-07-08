@@ -24,6 +24,9 @@
          Core to a device-wide privacy monitor's purpose. -->
     <uses-permission android:name="android.permission.QUERY_ALL_PACKAGES"
         tools:ignore="QueryAllPackagesPermission" />
+    <!-- Optional floating privacy indicator (the dot shown while cam/mic is in
+         use). Off until the user enables it and grants the permission. -->
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
 
     <application
         android:name=".PrivacyMonitorApp"

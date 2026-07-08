@@ -15,6 +15,7 @@ import com.privacyshield.monitor.core.model.UserDecision
 import com.privacyshield.monitor.di.AppContainer
 import com.privacyshield.monitor.notify.Notifier
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import java.util.concurrent.Executors
@@ -36,6 +37,7 @@ class MonitorService : LifecycleService() {
     private lateinit var deviceState: DeviceState
     private val analyzer = RiskAnalyzer()
     private val callbackExecutor = Executors.newSingleThreadExecutor()
+    private lateinit var overlay: OverlayIndicator
 
     override fun onCreate() {
         super.onCreate()
@@ -43,6 +45,23 @@ class MonitorService : LifecycleService() {
         notifier = Notifier(this)
         detector = SensorAccessMonitor(this)
         deviceState = DeviceState(this)
+        overlay = OverlayIndicator(this)
+        observeOverlay()
+    }
+
+    /** Drives the floating privacy dot from live sensor state + the user's toggle. */
+    private fun observeOverlay() {
+        lifecycleScope.launch {
+            combine(
+                MonitorState.active,
+                container.settings.settings,
+            ) { active, settings ->
+                if (!settings.overlayIndicatorEnabled) emptySet()
+                else active.values.map { it.sensor }
+                    .filter { it == SensorType.CAMERA || it == SensorType.MICROPHONE }
+                    .toSet()
+            }.collect { sensors -> overlay.update(sensors) }
+        }
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
@@ -190,6 +209,7 @@ class MonitorService : LifecycleService() {
 
     private fun stopEverything() {
         detector.stop()
+        overlay.hide()
         MonitorState.setRunning(false)
         MonitorState.reset()
         stopForeground(STOP_FOREGROUND_REMOVE)
@@ -198,6 +218,7 @@ class MonitorService : LifecycleService() {
 
     override fun onDestroy() {
         detector.stop()
+        overlay.hide()
         callbackExecutor.shutdown()
         MonitorState.setRunning(false)
         super.onDestroy()
