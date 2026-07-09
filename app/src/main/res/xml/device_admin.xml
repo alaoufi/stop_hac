@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Minimal device-admin policy. We only need to BE an admin to deter
-     uninstall; we request the least intrusive capability (force-lock). -->
+<!-- Device-admin policies. "disable-camera" lets the app actually cut the
+     camera for the whole device on the user's command (no root); "force-lock"
+     is the least-intrusive extra capability. -->
 <device-admin xmlns:android="http://schemas.android.com/apk/res/android">
     <uses-policies>
+        <disable-camera />
         <force-lock />
     </uses-policies>
 </device-admin>

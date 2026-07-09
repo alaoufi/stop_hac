@@ -45,6 +45,7 @@ class DashboardViewModel(private val container: AppContainer) : ViewModel() {
     )
 
     val rootAvailable: Boolean get() = forceBlock.rootAvailable
+    fun isDeviceAdminActive(): Boolean = forceBlock.isDeviceAdminActive()
     fun systemSensorToggleIntent() = forceBlock.systemSensorToggleIntent()
 
     /**

@@ -1,68 +1,88 @@
 package com.privacyshield.monitor.monitor
 
 import android.Manifest
+import android.app.admin.DevicePolicyManager
 import android.content.Context
 import android.content.Intent
 import android.provider.Settings
 import com.privacyshield.monitor.data.repo.AppRepository
 
 /**
- * Implements the dashboard "force block camera & microphone" switch.
+ * Implements the dashboard "force block camera & microphone" switch — the app's
+ * own control, not permission removal.
  *
- * ### What "forcibly" honestly means on Android
- * A normal app cannot cut another app off from the sensors. Two real
- * enforcement paths exist, and this controller uses whichever the device
- * offers:
+ * ### What is actually enforceable, honestly
+ * A normal app cannot switch another app's sensors off. But two real,
+ * app-driven controls exist and this uses whichever is available:
  *
- *  - **Rooted device** → we deny the CAMERA and RECORD_AUDIO app-ops for every
- *    (non-system) app via `appops ... ignore`. While the block is on, those
- *    apps get a black camera and a silent mic — a genuine, enforced block that
- *    persists until the user lifts it. Unblocking resets the ops to `default`.
- *  - **Non-rooted device** → the only true kill switch is the OS global sensor
- *    toggle (Android 12+). We open it for the user (who flips it) and keep our
- *    own "blocked" flag so monitoring stays aggressive. We never claim to have
- *    silently disabled the sensors ourselves when we haven't.
+ *  - **Camera, via Device Admin** ([DevicePolicyManager.setCameraDisabled]).
+ *    Once the user activates the app as a device admin, the app can cut the
+ *    camera for the **entire device** on command — no root. This is genuine,
+ *    app-controlled blocking that survives leaving/returning.
+ *  - **Everything, via root** — `appops ... ignore` on the camera and mic ops for
+ *    every non-system app.
+ *
+ * The **microphone** cannot be disabled by a device admin (Android exposes no
+ * such policy); without root, only the OS global sensor toggle can cut it, which
+ * the user flips. We never pretend to have muted the mic when we haven't.
  */
 class ForceBlockController(
     private val context: Context,
     private val appRepository: AppRepository,
 ) {
 
+    private val dpm =
+        context.getSystemService(Context.DEVICE_POLICY_SERVICE) as DevicePolicyManager
+    private val admin = TamperAdminReceiver.component(context)
+
     sealed interface Result {
-        /** Root enforced the block/unblock on [affected] apps. */
-        data class Enforced(val affected: Int) : Result
-        /** No root: we opened the system sensor toggle for the user to flip. */
+        /** What the app actually enforced this toggle. */
+        data class Enforced(val cameraByAdmin: Boolean, val appsByRoot: Int) : Result
+        /** No app-level enforcement available — the system sensor toggle was opened. */
         data object OpenedSystemToggle : Result
         data class Failed(val message: String) : Result
     }
 
     val rootAvailable: Boolean get() = RootShell.isRootBinaryPresent()
+    fun isDeviceAdminActive(): Boolean = runCatching { dpm.isAdminActive(admin) }.getOrDefault(false)
 
-    suspend fun block(): Result = apply(op = "ignore")
+    suspend fun block(): Result = apply(block = true)
+    suspend fun unblock(): Result = apply(block = false)
 
-    suspend fun unblock(): Result = apply(op = "default")
+    private suspend fun apply(block: Boolean): Result {
+        var cameraByAdmin = false
 
-    private suspend fun apply(op: String): Result {
-        if (!RootShell.isRootBinaryPresent()) {
-            return Result.OpenedSystemToggle
+        // 1. Camera via device admin — real, no root.
+        if (isDeviceAdminActive()) {
+            val ok = runCatching { dpm.setCameraDisabled(admin, block) }.isSuccess
+            if (ok) cameraByAdmin = true
         }
-        val targets = targetPackages()
-        if (targets.isEmpty()) return Result.Enforced(0)
 
-        val script = buildString {
-            targets.forEach { pkg ->
-                append("cmd appops set ").append(pkg).append(" CAMERA ").append(op).append(" ; ")
-                append("cmd appops set ").append(pkg).append(" RECORD_AUDIO ").append(op).append(" ; ")
+        // 2. Camera + mic for all apps via root, if available.
+        var appsByRoot = 0
+        if (RootShell.isRootBinaryPresent()) {
+            val op = if (block) "ignore" else "default"
+            val targets = targetPackages()
+            if (targets.isNotEmpty()) {
+                val script = buildString {
+                    targets.forEach { pkg ->
+                        append("cmd appops set ").append(pkg).append(" CAMERA ").append(op).append(" ; ")
+                        append("cmd appops set ").append(pkg).append(" RECORD_AUDIO ").append(op).append(" ; ")
+                    }
+                }
+                when (val outcome = RootShell.exec(script)) {
+                    RootShell.Outcome.Success -> appsByRoot = targets.size
+                    is RootShell.Outcome.Failed -> if (!cameraByAdmin) return Result.Failed(outcome.message)
+                    RootShell.Outcome.NoRoot -> {}
+                }
             }
         }
-        return when (val outcome = RootShell.exec(script)) {
-            RootShell.Outcome.Success -> Result.Enforced(targets.size)
-            RootShell.Outcome.NoRoot -> Result.OpenedSystemToggle
-            is RootShell.Outcome.Failed -> Result.Failed(outcome.message)
-        }
+
+        // Nothing app-enforceable → fall back to the OS sensor toggle.
+        if (!cameraByAdmin && appsByRoot == 0) return Result.OpenedSystemToggle
+        return Result.Enforced(cameraByAdmin, appsByRoot)
     }
 
-    /** Non-system apps that hold camera or microphone access — the real threat. */
     private fun targetPackages(): List<String> =
         appRepository.installedApps(includeSystem = false)
             .asSequence()

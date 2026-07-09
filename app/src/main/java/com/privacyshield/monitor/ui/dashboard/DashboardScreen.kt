@@ -467,6 +467,7 @@ private fun LiveCameraMicAlert(uses: List<ActiveUse>) {
 private fun ForceBlockCard(vm: DashboardViewModel, blocked: Boolean, lockEnabled: Boolean) {
     val context = LocalContext.current
     val rootAvailable = remember { vm.rootAvailable }
+    val adminActive = remember { vm.isDeviceAdminActive() }
     val unblockTitle = stringResource(R.string.block_auth_title)
     val unblockSubtitle = stringResource(R.string.block_auth_subtitle)
 
@@ -516,8 +517,10 @@ private fun ForceBlockCard(vm: DashboardViewModel, blocked: Boolean, lockEnabled
                 stringResource(
                     when {
                         blocked && rootAvailable -> R.string.dashboard_block_on_root
+                        blocked && adminActive -> R.string.dashboard_block_on_admin
                         blocked -> R.string.dashboard_block_on_generic
                         rootAvailable -> R.string.dashboard_block_root
+                        adminActive -> R.string.dashboard_block_admin
                         else -> R.string.dashboard_block_generic
                     },
                 ),
@@ -586,12 +589,28 @@ private fun handleBlockResult(
     wasBlocked: Boolean,
 ) {
     val msg = when (result) {
-        is com.privacyshield.monitor.monitor.ForceBlockController.Result.Enforced ->
-            context.getString(
-                if (wasBlocked) R.string.dashboard_block_lifted
-                else R.string.dashboard_block_enforced,
-                result.affected,
-            )
+        is com.privacyshield.monitor.monitor.ForceBlockController.Result.Enforced -> {
+            if (wasBlocked) {
+                context.getString(R.string.dashboard_block_restored)
+            } else {
+                val parts = mutableListOf<String>()
+                if (result.cameraByAdmin) parts.add(context.getString(R.string.block_msg_camera_admin))
+                if (result.appsByRoot > 0) {
+                    parts.add(context.getString(R.string.block_msg_root, result.appsByRoot))
+                }
+                // Mic can't be cut by a device admin — take the user to the OS
+                // toggle so they can actually silence it (unless root did).
+                if (result.appsByRoot == 0) {
+                    context.startActivity(
+                        com.privacyshield.monitor.monitor.ForceBlockController(
+                            context, com.privacyshield.monitor.data.repo.AppRepository(context),
+                        ).systemSensorToggleIntent(),
+                    )
+                    parts.add(context.getString(R.string.block_msg_mic_toggle))
+                }
+                parts.joinToString(" · ")
+            }
+        }
         com.privacyshield.monitor.monitor.ForceBlockController.Result.OpenedSystemToggle -> {
             context.startActivity(
                 com.privacyshield.monitor.monitor.ForceBlockController(
