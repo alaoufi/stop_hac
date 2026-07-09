@@ -69,7 +69,23 @@ class MainActivity : AppCompatActivity() {
             subtitle = getString(com.privacyshield.monitor.R.string.app_lock_subtitle),
             onSuccess = { unlocked = true },
             onFailure = { /* stay locked; the user can retry from the lock screen */ },
+            onWrongAttempt = { maybeCaptureIntruder() },
         )
+    }
+
+    /** On a failed unlock, photograph the intruder if the user enabled it. */
+    private fun maybeCaptureIntruder() {
+        val container = (application as PrivacyMonitorApp).container
+        lifecycleScope.launch {
+            val settings = container.settings.settings.first()
+            if (settings.intruderPhotoEnabled &&
+                com.privacyshield.monitor.monitor.IntruderCapture.hasCameraPermission(this@MainActivity)
+            ) {
+                com.privacyshield.monitor.monitor.IntruderCapture.capture(
+                    this@MainActivity, this@MainActivity, System.currentTimeMillis(),
+                )
+            }
+        }
     }
 
     /** Re-lock whenever the app leaves the foreground. */

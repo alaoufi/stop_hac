@@ -47,10 +47,16 @@ fun SettingsScreen(
     onOpenWhitelist: () -> Unit,
     onOpenAbout: () -> Unit,
     onOpenFirewall: () -> Unit,
+    onOpenIntruders: () -> Unit,
 ) {
     val settings by vm.settings.collectAsStateWithLifecycle()
     val context = LocalContext.current
     var confirmClear by remember { mutableStateOf(false) }
+
+    // CAMERA permission flow for the intruder-selfie feature.
+    val cameraLauncher = androidx.activity.compose.rememberLauncherForActivityResult(
+        androidx.activity.result.contract.ActivityResultContracts.RequestPermission(),
+    ) { granted -> if (granted) vm.setIntruderPhoto(true) }
 
     Scaffold(
         topBar = { TopAppBar(title = { Text(stringResource(R.string.settings_title)) }) },
@@ -142,6 +148,18 @@ fun SettingsScreen(
                             vm.disableTamperProtection()
                         }
                     }
+                    ToggleRow(
+                        stringResource(R.string.settings_intruder),
+                        stringResource(R.string.settings_intruder_desc),
+                        settings.intruderPhotoEnabled,
+                    ) { enabled ->
+                        if (enabled && !vm.hasCameraPermission()) {
+                            cameraLauncher.launch(android.Manifest.permission.CAMERA)
+                        } else {
+                            vm.setIntruderPhoto(enabled)
+                        }
+                    }
+                    NavRow(stringResource(R.string.intruder_title), onOpenIntruders)
                     ToggleRow(
                         stringResource(R.string.settings_overlay_indicator),
                         stringResource(R.string.settings_overlay_indicator_desc),

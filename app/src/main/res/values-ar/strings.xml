@@ -103,6 +103,14 @@
     <string name="settings_tamper_desc">اجعل التطبيق مدير جهاز حتى لا يُحذف قبل إزالة صلاحية المدير أولاً — وهو ما ينبّهك. أوقفه من هنا قبل إلغاء التثبيت.</string>
     <string name="tamper_explanation">تفعيل هذا يمنع حذف التطبيق بصمت، ويحمي مراقبة خصوصيتك من العبث.</string>
     <string name="tamper_disable_warning">إيقاف هذا يزيل الحماية من الحذف. إن لم تكن أنت من بدأ هذا، فقد يحاول أحدهم تعطيل مراقبة خصوصيتك.</string>
+
+    <!-- صورة المتطفّل -->
+    <string name="settings_intruder">تصوير المتطفّل</string>
+    <string name="settings_intruder_desc">التقاط صورة سرية بالكاميرا الأمامية عند فشل أحدهم في فتح التطبيق. تبقى الصور على جهازك. تعمل مع قفل التطبيق وتحتاج إذن الكاميرا.</string>
+    <string name="intruder_title">صور المتطفّلين</string>
+    <string name="intruder_subtitle">صور التُقطت عند محاولات فتح فاشلة. مخزّنة على هذا الجهاز فقط.</string>
+    <string name="intruder_empty">لا توجد صور متطفّلين — لا محاولات فتح فاشلة.</string>
+    <string name="intruder_clear">حذف الكل</string>
     <string name="block_auth_title">تأكيد هويتك</string>
     <string name="block_auth_subtitle">صادِق لفكّ حظر الكاميرا والميكروفون.</string>
     <string name="settings_block_lock">قفل فكّ الحظر</string>

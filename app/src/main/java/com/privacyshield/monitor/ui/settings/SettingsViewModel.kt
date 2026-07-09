@@ -54,6 +54,12 @@ class SettingsViewModel(private val container: AppContainer) : ViewModel() {
     fun setAppLock(enabled: Boolean) =
         viewModelScope.launch { container.settings.setAppLock(enabled) }
 
+    fun setIntruderPhoto(enabled: Boolean) =
+        viewModelScope.launch { container.settings.setIntruderPhoto(enabled) }
+
+    fun hasCameraPermission(): Boolean =
+        com.privacyshield.monitor.monitor.IntruderCapture.hasCameraPermission(container.appContext)
+
     // ---- Tamper protection (device admin) ----
     private val dpm = container.appContext
         .getSystemService(android.content.Context.DEVICE_POLICY_SERVICE)

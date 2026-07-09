@@ -103,6 +103,14 @@
     <string name="settings_tamper_desc">Make the app a device admin so it can\'t be uninstalled without first removing admin — which warns you. Turn off here before uninstalling.</string>
     <string name="tamper_explanation">Enabling this stops the app from being silently uninstalled, protecting your privacy monitoring from tampering.</string>
     <string name="tamper_disable_warning">Turning this off removes uninstall protection. If you didn\'t start this, someone may be trying to disable your privacy monitoring.</string>
+
+    <!-- Intruder selfie -->
+    <string name="settings_intruder">Photograph intruders</string>
+    <string name="settings_intruder_desc">Silently take a front-camera photo when someone fails to unlock the app. Photos stay on your device. Works with app-lock and needs the camera permission.</string>
+    <string name="intruder_title">Intruder photos</string>
+    <string name="intruder_subtitle">Photos taken on failed unlock attempts. Stored only on this device.</string>
+    <string name="intruder_empty">No intruder photos — no failed unlock attempts.</string>
+    <string name="intruder_clear">Delete all</string>
     <string name="block_auth_title">Confirm it\'s you</string>
     <string name="block_auth_subtitle">Authenticate to unblock the camera &amp; microphone.</string>
     <string name="settings_block_lock">Lock unblocking</string>

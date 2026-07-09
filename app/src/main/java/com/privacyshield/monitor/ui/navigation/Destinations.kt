@@ -30,4 +30,5 @@ object Routes {
     const val WHITELIST = "whitelist"
     const val ABOUT = "about"
     const val FIREWALL = "firewall"
+    const val INTRUDERS = "intruders"
 }

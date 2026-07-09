@@ -27,6 +27,10 @@
     <!-- Optional floating privacy indicator (the dot shown while cam/mic is in
          use). Off until the user enables it and grants the permission. -->
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+    <!-- Optional intruder-selfie: only used to photograph whoever fails to unlock
+         the app. Off by default; the user grants it explicitly. -->
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-feature android:name="android.hardware.camera.any" android:required="false" />
 
     <application
         android:name=".PrivacyMonitorApp"

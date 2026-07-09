@@ -22,6 +22,7 @@ import com.privacyshield.monitor.ui.apps.AppsScreen
 import com.privacyshield.monitor.ui.dashboard.DashboardScreen
 import com.privacyshield.monitor.ui.events.EventsScreen
 import com.privacyshield.monitor.ui.firewall.FirewallScreen
+import com.privacyshield.monitor.ui.intruder.IntruderScreen
 import com.privacyshield.monitor.ui.navigation.Routes
 import com.privacyshield.monitor.ui.navigation.TopDestination
 import com.privacyshield.monitor.ui.permissions.PermissionsScreen
@@ -93,6 +94,7 @@ fun PrivacyShieldApp(container: AppContainer, factory: ViewModelProvider.Factory
                     onOpenWhitelist = { navController.navigate(Routes.WHITELIST) },
                     onOpenAbout = { navController.navigate(Routes.ABOUT) },
                     onOpenFirewall = { navController.navigate(Routes.FIREWALL) },
+                    onOpenIntruders = { navController.navigate(Routes.INTRUDERS) },
                 )
             }
             composable(Routes.WHITELIST) {
@@ -103,6 +105,9 @@ fun PrivacyShieldApp(container: AppContainer, factory: ViewModelProvider.Factory
             }
             composable(Routes.FIREWALL) {
                 FirewallScreen(vm = viewModel(factory), onBack = { navController.popBackStack() })
+            }
+            composable(Routes.INTRUDERS) {
+                IntruderScreen(onBack = { navController.popBackStack() })
             }
         }
     }

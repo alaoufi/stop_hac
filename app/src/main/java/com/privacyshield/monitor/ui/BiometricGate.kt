@@ -45,6 +45,7 @@ object BiometricGate {
         subtitle: String,
         onSuccess: () -> Unit,
         onFailure: () -> Unit,
+        onWrongAttempt: (() -> Unit)? = null,
     ) {
         val executor = ContextCompat.getMainExecutor(activity)
         val prompt = BiometricPrompt(
@@ -53,6 +54,11 @@ object BiometricGate {
             object : BiometricPrompt.AuthenticationCallback() {
                 override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) {
                     onSuccess()
+                }
+
+                override fun onAuthenticationFailed() {
+                    // A presented credential was wrong (e.g. unrecognised finger).
+                    onWrongAttempt?.invoke()
                 }
 
                 override fun onAuthenticationError(errorCode: Int, errString: CharSequence) {
