@@ -63,6 +63,9 @@ class PeriodicScanWorker(
         // 2. Special-access diff (accessibility / notification listeners / admins).
         scanSpecialAccess(notifier)
 
+        // 2b. Enforce "keep denied" permission locks that came back.
+        PermissionEnforcer(applicationContext).enforce()
+
         // 3. Retention.
         container.eventRepository.applyRetention(settings.retentionDays, now)
 

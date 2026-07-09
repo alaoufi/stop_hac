@@ -88,6 +88,14 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    /** On every return to the foreground, enforce the user's permission locks. */
+    override fun onStart() {
+        super.onStart()
+        lifecycleScope.launch {
+            com.privacyshield.monitor.monitor.PermissionEnforcer(this@MainActivity).enforce()
+        }
+    }
+
     /** Re-lock whenever the app leaves the foreground. */
     override fun onStop() {
         super.onStop()

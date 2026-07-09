@@ -139,6 +139,9 @@
     <string name="sheet_perm_no_root">صلاحية الجذر غير متوفرة على هذا الجهاز.</string>
     <string name="sheet_perm_failed">تعذّر التغيير: %1$s</string>
     <string name="sheet_perm_confirm_in_settings">أكّد التغيير من شاشة الصلاحيات التي فُتحت للتو.</string>
+    <string name="perm_keep_denied">إبقاؤها ممنوعة (قفل)</string>
+    <string name="perm_regrant_title">رجعت صلاحية مقفولة</string>
+    <string name="perm_regrant_text">استعاد %1$s صلاحية %2$s التي قفلتها كممنوعة. اضغط لإلغائها مجدداً.</string>
 
     <!-- شاشة التطبيقات -->
     <string name="apps_title">التطبيقات ونشاط الخلفية</string>

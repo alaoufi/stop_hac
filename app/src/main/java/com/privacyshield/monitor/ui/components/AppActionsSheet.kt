@@ -20,6 +20,8 @@ import androidx.compose.material.icons.filled.Block
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.DeleteForever
 import androidx.compose.material.icons.filled.Info
+import androidx.compose.material.icons.filled.Lock
+import androidx.compose.material.icons.filled.LockOpen
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -30,6 +32,7 @@ import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
@@ -74,6 +77,10 @@ fun AppActionsSheet(
     val scope = rememberCoroutineScope()
     val pkg = packageName
     val rootPresent = remember { RootShell.isRootBinaryPresent() }
+    val container = remember {
+        (context.applicationContext as com.privacyshield.monitor.PrivacyMonitorApp).container
+    }
+    val lockedSet by container.settings.lockedPermissions.collectAsState(initial = emptySet())
 
     // Bumping this re-reads the granted state after a root grant/revoke.
     var refreshTick by remember { mutableIntStateOf(0) }
@@ -134,9 +141,27 @@ fun AppActionsSheet(
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
                 perms.forEach { p ->
+                    val manifest = p.permission.manifestPermission
+                    val locked = manifest != null && "$pkg|$manifest" in lockedSet
                     PermissionRow(
                         label = stringResource(p.labelRes),
                         granted = p.granted,
+                        locked = locked,
+                        onLockToggle = {
+                            manifest ?: return@PermissionRow
+                            scope.launch {
+                                container.settings.setPermissionLocked(pkg, manifest, !locked)
+                                if (!locked) {
+                                    // Newly locked: enforce it now.
+                                    if (rootPresent) {
+                                        RootShell.revoke(pkg, manifest)
+                                        refreshTick++
+                                    } else {
+                                        context.startActivity(appDetails(pkg))
+                                    }
+                                }
+                            }
+                        },
                         onToggle = {
                             if (rootPresent) {
                                 scope.launch {
@@ -207,7 +232,13 @@ fun AppActionsSheet(
 }
 
 @Composable
-private fun PermissionRow(label: String, granted: Boolean, onToggle: () -> Unit) {
+private fun PermissionRow(
+    label: String,
+    granted: Boolean,
+    locked: Boolean,
+    onLockToggle: () -> Unit,
+    onToggle: () -> Unit,
+) {
     Row(
         Modifier.fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically,
@@ -221,6 +252,14 @@ private fun PermissionRow(label: String, granted: Boolean, onToggle: () -> Unit)
         )
         Spacer(Modifier.size(10.dp))
         Text(label, Modifier.weight(1f), style = MaterialTheme.typography.bodyLarge)
+        androidx.compose.material3.IconButton(onClick = onLockToggle) {
+            Icon(
+                if (locked) Icons.Filled.Lock else Icons.Filled.LockOpen,
+                contentDescription = stringResource(R.string.perm_keep_denied),
+                tint = if (locked) MaterialTheme.colorScheme.error
+                else MaterialTheme.colorScheme.onSurfaceVariant,
+            )
+        }
         if (granted) {
             Button(
                 onClick = onToggle,

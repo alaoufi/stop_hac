@@ -69,6 +69,7 @@ class SettingsRepository(private val context: Context) {
         val OVERLAY_INDICATOR = booleanPreferencesKey("overlay_indicator")
         val FIREWALL_ENABLED = booleanPreferencesKey("firewall_enabled")
         val BLOCKED_APPS = stringSetPreferencesKey("firewall_blocked_apps")
+        val LOCKED_PERMS = stringSetPreferencesKey("locked_denied_permissions")
         val NOTIFY_NORMAL = booleanPreferencesKey("notify_normal")
         val ALERT_SENSOR_USE = booleanPreferencesKey("alert_sensor_use")
         val INCLUDE_SYSTEM = booleanPreferencesKey("include_system")
@@ -125,6 +126,20 @@ class SettingsRepository(private val context: Context) {
 
     suspend fun blockedAppsNow(): Set<String> =
         context.dataStore.data.map { it[Keys.BLOCKED_APPS] ?: emptySet() }.first()
+
+    /** Permissions the user locked as denied, encoded as "packageName|permission". */
+    val lockedPermissions: Flow<Set<String>> =
+        context.dataStore.data.map { it[Keys.LOCKED_PERMS] ?: emptySet() }
+
+    suspend fun lockedPermissionsNow(): Set<String> =
+        context.dataStore.data.map { it[Keys.LOCKED_PERMS] ?: emptySet() }.first()
+
+    suspend fun setPermissionLocked(packageName: String, permission: String, locked: Boolean) = edit {
+        val key = "$packageName|$permission"
+        val current = (it[Keys.LOCKED_PERMS] ?: emptySet()).toMutableSet()
+        if (locked) current.add(key) else current.remove(key)
+        it[Keys.LOCKED_PERMS] = current
+    }
     suspend fun setNotifyNormal(enabled: Boolean) = edit { it[Keys.NOTIFY_NORMAL] = enabled }
     suspend fun setAlertOnSensorUse(enabled: Boolean) = edit { it[Keys.ALERT_SENSOR_USE] = enabled }
     suspend fun setIncludeSystemApps(enabled: Boolean) = edit { it[Keys.INCLUDE_SYSTEM] = enabled }

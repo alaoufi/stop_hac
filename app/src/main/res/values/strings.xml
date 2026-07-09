@@ -139,6 +139,9 @@
     <string name="sheet_perm_no_root">Root is not available on this device.</string>
     <string name="sheet_perm_failed">Could not change it: %1$s</string>
     <string name="sheet_perm_confirm_in_settings">Confirm the change on the permission screen that just opened.</string>
+    <string name="perm_keep_denied">Keep denied (lock)</string>
+    <string name="perm_regrant_title">A locked permission came back</string>
+    <string name="perm_regrant_text">%1$s regained the %2$s permission you locked as denied. Tap to revoke it again.</string>
 
     <!-- Apps screen -->
     <string name="apps_title">Apps &amp; background activity</string>
