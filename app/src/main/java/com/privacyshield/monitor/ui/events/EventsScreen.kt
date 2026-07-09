@@ -134,7 +134,7 @@ fun EventsScreen(vm: EventsViewModel) {
                     onClick = { vm.setSensor(null) },
                     label = { Text(stringResource(R.string.filter_all)) },
                 )
-                SensorType.entries.forEach { s ->
+                listOf(SensorType.CAMERA, SensorType.MICROPHONE).forEach { s ->
                     FilterChip(
                         selected = filter.sensor == s,
                         onClick = { vm.setSensor(if (filter.sensor == s) null else s) },

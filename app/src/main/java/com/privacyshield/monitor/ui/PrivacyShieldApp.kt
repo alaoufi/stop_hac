@@ -18,15 +18,11 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.privacyshield.monitor.di.AppContainer
-import com.privacyshield.monitor.ui.apps.AppsScreen
 import com.privacyshield.monitor.ui.dashboard.DashboardScreen
 import com.privacyshield.monitor.ui.events.EventsScreen
-import com.privacyshield.monitor.ui.firewall.FirewallScreen
 import com.privacyshield.monitor.ui.intruder.IntruderScreen
 import com.privacyshield.monitor.ui.navigation.Routes
 import com.privacyshield.monitor.ui.navigation.TopDestination
-import com.privacyshield.monitor.ui.permissions.PermissionsScreen
-import com.privacyshield.monitor.ui.reports.ReportsScreen
 import com.privacyshield.monitor.ui.settings.SettingsScreen
 import com.privacyshield.monitor.ui.whitelist.WhitelistScreen
 
@@ -76,24 +72,14 @@ fun PrivacyShieldApp(container: AppContainer, factory: ViewModelProvider.Factory
                     onOpenSettings = { navController.navigate(TopDestination.SETTINGS.route) },
                 )
             }
-            composable(TopDestination.APPS.route) {
-                AppsScreen(vm = viewModel(factory))
-            }
             composable(TopDestination.EVENTS.route) {
                 EventsScreen(vm = viewModel(factory))
-            }
-            composable(TopDestination.PERMISSIONS.route) {
-                PermissionsScreen(vm = viewModel(factory))
-            }
-            composable(TopDestination.REPORTS.route) {
-                ReportsScreen(vm = viewModel(factory))
             }
             composable(TopDestination.SETTINGS.route) {
                 SettingsScreen(
                     vm = viewModel(factory),
                     onOpenWhitelist = { navController.navigate(Routes.WHITELIST) },
                     onOpenAbout = { navController.navigate(Routes.ABOUT) },
-                    onOpenFirewall = { navController.navigate(Routes.FIREWALL) },
                     onOpenIntruders = { navController.navigate(Routes.INTRUDERS) },
                 )
             }
@@ -102,9 +88,6 @@ fun PrivacyShieldApp(container: AppContainer, factory: ViewModelProvider.Factory
             }
             composable(Routes.ABOUT) {
                 AboutScreen(onBack = { navController.popBackStack() })
-            }
-            composable(Routes.FIREWALL) {
-                FirewallScreen(vm = viewModel(factory), onBack = { navController.popBackStack() })
             }
             composable(Routes.INTRUDERS) {
                 IntruderScreen(onBack = { navController.popBackStack() })

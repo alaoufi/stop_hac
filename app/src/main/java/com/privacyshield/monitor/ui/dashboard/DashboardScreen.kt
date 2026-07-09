@@ -117,16 +117,11 @@ fun DashboardScreen(
             // Always-visible forced block toggle for the camera & microphone.
             item { ForceBlockCard(vm, state.forceBlockEnabled, state.blockLockEnabled) }
 
-            // One-tap emergency lockdown.
-            item { PanicButton(vm) }
-
             if (!state.detectorSupported) {
                 item { DetectorLimitationCard() }
             }
 
-            item { SensorStatusGrid(state, deviceStatus) }
-
-            item { BackgroundAppsSection(deviceState) }
+            item { CameraMicStatus(state) }
 
             item {
                 TodaySummary(
@@ -216,6 +211,25 @@ private fun SecurityLevelHeader(state: DashboardUiState) {
                     )
                 }
             }
+        }
+    }
+}
+
+/** Focused live status: just the camera and the microphone. */
+@Composable
+private fun CameraMicStatus(state: DashboardUiState) {
+    val cameraActive = state.activeUses.any { it.sensor == SensorType.CAMERA }
+    val micActive = state.activeUses.any { it.sensor == SensorType.MICROPHONE }
+    SectionCard(title = stringResource(R.string.dashboard_live_status)) {
+        Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+            StatusTile(
+                Icons.Filled.CameraAlt, stringResource(R.string.sensor_camera),
+                stateText(cameraActive), cameraActive, Modifier.weight(1f),
+            )
+            StatusTile(
+                Icons.Filled.Mic, stringResource(R.string.sensor_microphone),
+                stateText(micActive), micActive, Modifier.weight(1f),
+            )
         }
     }
 }

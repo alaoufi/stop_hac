@@ -191,7 +191,7 @@ private fun AddRuleDialog(vm: WhitelistViewModel, onDismiss: () -> Unit) {
                     }
                     Spacer(Modifier.size(8.dp))
                     Text(stringResource(R.string.whitelist_sensor), style = MaterialTheme.typography.labelLarge)
-                    SensorType.entries.forEach { s ->
+                    listOf(SensorType.CAMERA, SensorType.MICROPHONE).forEach { s ->
                         RadioRow(sensorName(s), sensor == s) { sensor = s }
                     }
                     Spacer(Modifier.size(8.dp))
