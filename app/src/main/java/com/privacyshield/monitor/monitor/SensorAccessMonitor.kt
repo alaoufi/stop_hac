@@ -45,8 +45,14 @@ class SensorAccessMonitor(private val context: Context) {
     fun start(executor: Executor, onChange: (SensorAccessChange) -> Unit): Boolean {
         if (!isSupported || listener != null) return isSupported
 
+        // Watch ONLY the camera and microphone in real time. Location ops fire
+        // dozens of times per second on any device with active location, which
+        // would flood the callback and overheat the phone — and camera/mic are
+        // the real concern anyway. Location is still covered by the permission
+        // monitor and reports.
         val ops = buildList {
-            SensorType.entries.forEach { addAll(SensorType.opStringsFor(it)) }
+            addAll(SensorType.opStringsFor(SensorType.CAMERA))
+            addAll(SensorType.opStringsFor(SensorType.MICROPHONE))
         }.toTypedArray()
 
         val l = AppOpsManager.OnOpActiveChangedListener { op, uid, packageName, active ->

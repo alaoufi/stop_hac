@@ -40,6 +40,9 @@ class MonitorService : LifecycleService() {
     private lateinit var overlay: OverlayIndicator
     private var installReceiver: InstallReceiver? = null
 
+    /** Last time a "start" was handled per (sensor:package), for flap coalescing. */
+    private val lastStartHandled = java.util.concurrent.ConcurrentHashMap<String, Long>()
+
     override fun onCreate() {
         super.onCreate()
         container = (application as PrivacyMonitorApp).container
@@ -126,11 +129,24 @@ class MonitorService : LifecycleService() {
     }
 
     private suspend fun onAccessStarted(change: SensorAccessChange) {
+        // Skip our own accesses.
+        if (change.packageName == packageName) return
+
+        // De-dupe: if this (app, sensor) is already marked active, a duplicate
+        // "start" arrived — ignore it so we don't insert/notify twice.
+        if (MonitorState.activeFor(change.sensor).any { it.packageName == change.packageName }) return
+
+        // Throttle flapping: some apps rapidly start/stop the sensor. Coalesce
+        // repeated starts for the same (app, sensor) within a short window so the
+        // database and notifications aren't hammered (this was overheating).
+        val key = "${change.sensor.name}:${change.packageName}"
+        val nowTs = System.currentTimeMillis()
+        val last = lastStartHandled[key]
+        if (last != null && nowTs - last < START_COALESCE_MS) return
+        lastStartHandled[key] = nowTs
+
         val appInfo = container.appRepository.info(change.packageName)
         val settings = container.settings.settings.first()
-
-        // Skip our own accesses and, unless opted in, system apps.
-        if (change.packageName == packageName) return
 
         val foreground = deviceState.isForeground(change.packageName) ?: false
         val screenOn = deviceState.isScreenOn()
@@ -265,6 +281,9 @@ class MonitorService : LifecycleService() {
 
     companion object {
         const val ACTION_STOP = "com.privacyshield.monitor.STOP"
+
+        /** Ignore repeat starts for the same app+sensor within this window. */
+        private const val START_COALESCE_MS = 2_000L
 
         fun start(context: Context) {
             val intent = Intent(context, MonitorService::class.java)
