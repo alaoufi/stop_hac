@@ -1,0 +1,338 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Privacy Shield</string>
+
+    <!-- Generic actions -->
+    <string name="see_all">See all</string>
+    <string name="filter_all">All</string>
+    <string name="action_app_info">App info</string>
+    <string name="action_open_dashboard">Open app</string>
+    <string name="action_remove">Remove</string>
+    <string name="action_cancel">Cancel</string>
+    <string name="action_confirm">Confirm</string>
+
+    <!-- Navigation -->
+    <string name="nav_dashboard">Dashboard</string>
+    <string name="nav_apps">Apps</string>
+    <string name="nav_events">Log</string>
+    <string name="nav_permissions">Permissions</string>
+    <string name="nav_reports">Reports</string>
+    <string name="nav_settings">Settings</string>
+
+    <!-- Sensors -->
+    <string name="sensor_camera">Camera</string>
+    <string name="sensor_microphone">Microphone</string>
+    <string name="sensor_location">Location</string>
+
+    <!-- Risk levels -->
+    <string name="risk_normal">Normal</string>
+    <string name="risk_attention">Needs attention</string>
+    <string name="risk_suspicious">Suspicious</string>
+    <string name="risk_critical">Dangerous</string>
+
+    <!-- Notification channels -->
+    <string name="channel_service">Monitoring service</string>
+    <string name="channel_service_desc">Keeps privacy monitoring running.</string>
+    <string name="channel_alerts">Risk alerts</string>
+    <string name="channel_alerts_desc">Suspicious and dangerous access alerts.</string>
+    <string name="channel_info">Activity notices</string>
+    <string name="channel_info_desc">Normal sensor activity notices.</string>
+    <string name="notif_service_title">Privacy Shield is protecting you</string>
+    <string name="notif_service_title_max">Maximum protection is active</string>
+    <string name="notif_service_active">Monitoring camera, microphone and location access.</string>
+
+    <!-- Risk reasons (with %1$s = app, and sensor/duration args) -->
+    <string name="reason_in_call">%1$s is using it during an active call — expected.</string>
+    <string name="reason_whitelist_always">You allowed %1$s always for this sensor.</string>
+    <string name="reason_whitelist_foreground_ok">%1$s is allowed while open, and it is currently open.</string>
+    <string name="reason_whitelist_foreground_violated">%1$s is only allowed while open, but it accessed this in the background.</string>
+    <string name="reason_whitelist_screen_ok">%1$s is allowed while the screen is on.</string>
+    <string name="reason_whitelist_screen_violated">%1$s accessed this while the screen was off, which you did not allow.</string>
+    <string name="reason_whitelist_block_bg">%1$s is blocked in the background and tried to access this while hidden.</string>
+    <string name="reason_whitelist_always_block">You blocked %1$s from this sensor entirely.</string>
+    <string name="reason_fg_camera">%1$s is open on screen and using the camera — expected.</string>
+    <string name="reason_fg_mic">%1$s is open on screen and using the microphone — expected.</string>
+    <string name="reason_fg_location">%1$s is open on screen and using location — expected.</string>
+    <string name="reason_bg_long_recording">%1$s used the %3$s for %2$s minutes while hidden, with no call or known recording — flagged as dangerous.</string>
+    <string name="reason_bg_frequent">%1$s accessed sensors in the background %2$s times today without you opening it.</string>
+    <string name="reason_bg_after_boot">%1$s started accessing a sensor right after reboot without you opening it.</string>
+    <string name="reason_bg_system">%1$s is a system app using the %2$s in the background — usually a platform service.</string>
+    <string name="reason_bg_unexpected">%1$s used the %2$s in the background while you were not using it.</string>
+    <string name="reason_perm_granted">%1$s was granted a sensitive permission (%2$s).</string>
+    <string name="reason_intrusion_blocked">⚠️ Intrusion attempt: %1$s tried to use the %2$s while it is force-blocked. Open it and force-stop or uninstall it.</string>
+
+    <!-- Dashboard -->
+    <string name="dashboard_security_level">Current security level</string>
+    <string name="dashboard_live_status">Live status</string>
+    <string name="dashboard_today_summary">Today\'s activity</string>
+    <string name="dashboard_recent_events">Recent events</string>
+    <string name="dashboard_no_events">No events recorded yet.</string>
+    <string name="dashboard_monitoring_paused">Monitoring is paused.</string>
+    <string name="dashboard_detector_unsupported">Real-time detection is unavailable on this device or Android version. The app still monitors permissions and shows the state it can read.</string>
+    <string name="dashboard_live_alert_title">In use right now</string>
+    <string name="dashboard_killswitch_title">Turn off camera &amp; microphone</string>
+    <string name="dashboard_killswitch_supported">This device has global sensor switches that cut power to the camera and microphone for every app. Tap to open them.</string>
+    <string name="dashboard_killswitch_generic">Open the system privacy controls to disable sensors and review which apps can use them.</string>
+    <string name="dashboard_killswitch_button">Open sensor controls</string>
+    <string name="dashboard_block_title">Force-block camera &amp; microphone</string>
+    <string name="dashboard_block_on_title">Camera &amp; microphone are blocked</string>
+    <string name="dashboard_block_root">Root detected — this will forcibly deny camera &amp; mic to every app until you unblock.</string>
+    <string name="dashboard_block_admin">Device admin is active — the app can cut the camera for all apps directly. The microphone needs the system toggle (opened for you).</string>
+    <string name="dashboard_block_generic">To let the app cut the camera itself, turn on Anti-uninstall (device admin) in Settings. Otherwise this opens the system sensor switch — Android won\'t let an app cut the sensors silently.</string>
+    <string name="dashboard_block_on_root">Camera &amp; mic are denied to all apps by force. They cannot be used until you unblock.</string>
+    <string name="dashboard_block_on_admin">Camera is cut for all apps by the app. Use the system toggle to also silence the microphone.</string>
+    <string name="dashboard_block_on_generic">Block mode is on. Flip the system sensor switch to fully cut power; the app watches for any attempt.</string>
+    <string name="dashboard_block_now">Block now</string>
+    <string name="dashboard_block_unblock">Unblock</string>
+    <string name="dashboard_block_restored">Unblocked — camera restored.</string>
+    <string name="block_msg_camera_admin">Camera cut for all apps.</string>
+    <string name="block_msg_root">%1$d apps\' camera &amp; mic blocked.</string>
+    <string name="block_msg_mic_toggle">Opening the system toggle for the microphone.</string>
+    <string name="dashboard_block_open_system">Opened the system sensor switch — turn it on to enforce.</string>
+    <string name="dashboard_block_failed">Could not enforce: %1$s</string>
+    <string name="admin_camera_explanation">Activate to let Privacy Shield cut the camera for all apps on your command. You can turn this off any time.</string>
+    <string name="dashboard_block_locked_note">🔒 Unlocking requires your fingerprint or PIN.</string>
+    <string name="dashboard_panic">🚨 Panic — lock everything down</string>
+    <string name="dashboard_panic_done">Lockdown on: sensors force-blocked and alerts maxed.</string>
+
+    <!-- App lock -->
+    <string name="app_lock_title">Unlock Privacy Shield</string>
+    <string name="app_lock_subtitle">Authenticate to open the app.</string>
+    <string name="app_lock_locked">Locked — authenticate to continue.</string>
+    <string name="app_lock_unlock">Unlock</string>
+    <string name="settings_app_lock">Lock the app</string>
+    <string name="settings_app_lock_desc">Require your fingerprint / face / PIN to open Privacy Shield, so no one can change your protection.</string>
+
+    <!-- Tamper protection -->
+    <string name="settings_tamper">Anti-uninstall protection</string>
+    <string name="settings_tamper_desc">Make the app a device admin so it can\'t be uninstalled without first removing admin — which warns you. Turn off here before uninstalling.</string>
+    <string name="tamper_explanation">Enabling this stops the app from being silently uninstalled, protecting your privacy monitoring from tampering.</string>
+    <string name="tamper_disable_warning">Turning this off removes uninstall protection. If you didn\'t start this, someone may be trying to disable your privacy monitoring.</string>
+
+    <!-- Intruder selfie -->
+    <string name="settings_intruder">Photograph intruders</string>
+    <string name="settings_intruder_desc">Silently take a front-camera photo when someone fails to unlock the app. Photos stay on your device. Works with app-lock and needs the camera permission.</string>
+    <string name="intruder_title">Intruder photos</string>
+    <string name="intruder_subtitle">Photos taken on failed unlock attempts. Stored only on this device.</string>
+    <string name="intruder_empty">No intruder photos — no failed unlock attempts.</string>
+    <string name="intruder_clear">Delete all</string>
+    <string name="block_auth_title">Confirm it\'s you</string>
+    <string name="block_auth_subtitle">Authenticate to unblock the camera &amp; microphone.</string>
+    <string name="settings_block_lock">Lock unblocking</string>
+    <string name="settings_block_lock_desc">Require your fingerprint / face / PIN to lift the forced block, so no one else can turn protection off.</string>
+    <string name="settings_block_lock_unavailable">Set up a screen lock (PIN, pattern or biometric) first.</string>
+    <string name="dashboard_background_apps">Recently active apps</string>
+    <string name="dashboard_background_none">No recent app activity detected.</string>
+    <string name="dashboard_last_active">Last active %1$s</string>
+    <string name="status_background">Background</string>
+    <string name="dashboard_usage_access_title">Enable accurate detection</string>
+    <string name="dashboard_usage_access_body">Grant \"Usage access\" so the app can tell whether an app using your camera or microphone is open on screen or hidden in the background — and list recently active apps. This stays on your device.</string>
+    <string name="dashboard_usage_access_button">Grant usage access</string>
+
+    <!-- App actions sheet -->
+    <string name="sheet_risk_label">Risk level:</string>
+    <string name="sheet_force_stop">Force stop the app</string>
+    <string name="sheet_force_stop_hint">Opens the system App info screen — tap \"Force stop\" there. Android does not let another app stop it silently.</string>
+    <string name="sheet_uninstall">Uninstall permanently</string>
+    <string name="sheet_app_info">App info &amp; permissions</string>
+    <string name="sheet_permissions">Permissions</string>
+    <string name="sheet_perm_root_mode">Root detected — changes are applied directly and instantly.</string>
+    <string name="sheet_perm_settings_mode">Without root, Android only lets you change these in system settings — the button opens the exact screen.</string>
+    <string name="sheet_perm_grant">Allow</string>
+    <string name="sheet_perm_revoke">Deny</string>
+    <string name="sheet_perm_done">Permission updated.</string>
+    <string name="sheet_perm_no_root">Root is not available on this device.</string>
+    <string name="sheet_perm_failed">Could not change it: %1$s</string>
+    <string name="sheet_perm_confirm_in_settings">Confirm the change on the permission screen that just opened.</string>
+    <string name="perm_keep_denied">Keep denied (lock)</string>
+    <string name="perm_regrant_title">A locked permission came back</string>
+    <string name="perm_regrant_text">%1$s regained the %2$s permission you locked as denied. Tap to revoke it again.</string>
+
+    <!-- Apps screen -->
+    <string name="apps_title">Apps &amp; background activity</string>
+    <string name="apps_subtitle">Every app, what it can access, whether it has been active, and its risk. Tap an app to stop or uninstall it.</string>
+    <string name="apps_user_only">Installed apps</string>
+    <string name="apps_include_system">Include system</string>
+    <string name="apps_state_live">Using a sensor now</string>
+    <string name="apps_state_installed">Idle</string>
+    <string name="apps_category_other">App</string>
+    <string name="apps_can_access">Can access: %1$s.</string>
+    <string name="apps_no_sensitive">No camera/mic/location access.</string>
+    <string name="apps_bg_uses">Used sensors in the background %1$d times (last 30 days).</string>
+    <string name="cat_game">Game</string>
+    <string name="cat_audio">Audio / music</string>
+    <string name="cat_video">Video</string>
+    <string name="cat_image">Photos</string>
+    <string name="cat_social">Social / messaging</string>
+    <string name="cat_news">News</string>
+    <string name="cat_maps">Maps / navigation</string>
+    <string name="cat_productivity">Productivity</string>
+    <string name="level_high">High</string>
+    <string name="level_high_desc">No suspicious activity detected recently.</string>
+    <string name="level_medium">Medium</string>
+    <string name="level_medium_desc">Some activity needs your attention.</string>
+    <string name="level_low">Low</string>
+    <string name="level_low_desc">Dangerous activity was detected — please review.</string>
+
+    <string name="status_in_use">In use</string>
+    <string name="status_idle">Idle</string>
+    <string name="status_on">On</string>
+    <string name="status_off">Off</string>
+    <string name="status_service_off">Service off</string>
+    <string name="status_unavailable">Unavailable</string>
+    <string name="status_monitored">Monitored</string>
+    <string name="status_bluetooth">Bluetooth</string>
+    <string name="status_nfc">NFC</string>
+    <string name="status_screen_share">Screen sharing</string>
+
+    <!-- Events -->
+    <string name="events_title">Event log</string>
+    <string name="events_export">Export CSV</string>
+    <string name="events_clear">Clear</string>
+    <string name="events_search_hint">Search by app name…</string>
+    <string name="events_empty">No events match your filters.</string>
+    <string name="window_day">24h</string>
+    <string name="window_week">7 days</string>
+    <string name="window_month">30 days</string>
+    <string name="window_all">All</string>
+
+    <!-- Firewall -->
+    <string name="firewall_title">Internet firewall</string>
+    <string name="firewall_master">Per-app internet firewall</string>
+    <string name="firewall_off">Off — no apps are blocked.</string>
+    <string name="firewall_active_count">Active — %1$d app(s) cut off from the internet.</string>
+    <string name="firewall_explainer">Blocks a chosen app from all internet access — the strongest way to stop data leaving your device. Runs fully on-device: it only drops the blocked apps\' traffic and sends nothing anywhere (no internet permission).</string>
+    <string name="firewall_search">Search apps…</string>
+    <string name="firewall_running_note">Firewall active — blocking selected apps.</string>
+
+    <!-- Install alerts -->
+    <string name="install_new_app_title">New app installed</string>
+    <string name="install_new_app_plain">%1$s was just installed.</string>
+    <string name="install_new_app_perms">%1$s was just installed and can already use: %2$s.</string>
+
+    <!-- Special access -->
+    <string name="permissions_special_title">High-power access</string>
+    <string name="permissions_special_subtitle">Apps with the powerful access malware relies on. Review anything you don\'t recognise.</string>
+    <string name="sa_accessibility">Accessibility</string>
+    <string name="sa_notification_listener">Notification access</string>
+    <string name="sa_device_admin">Device admin</string>
+    <string name="sa_accessibility_risk">Can read everything on your screen and tap/type for you. Grant only to fully trusted apps.</string>
+    <string name="sa_notification_risk">Can read all your notifications, including messages and one-time codes.</string>
+    <string name="sa_device_admin_risk">Holds administrator control (can lock or wipe the device) and is harder to uninstall.</string>
+    <string name="sa_new_alert_title">New high-power access granted</string>
+    <string name="sa_new_alert_text">%1$s now holds %2$s access.</string>
+    <string name="sa_none">Nothing has this access — good.</string>
+
+    <!-- Permissions -->
+    <string name="permissions_title">Permission monitor</string>
+    <string name="permissions_subtitle">Apps that currently hold sensitive permissions. Tap an app to change it in system settings.</string>
+    <string name="perm_camera">Camera</string>
+    <string name="perm_microphone">Microphone</string>
+    <string name="perm_location">Location</string>
+    <string name="perm_bg_location">Background location</string>
+    <string name="perm_notifications">Notifications</string>
+    <string name="perm_contacts">Contacts</string>
+    <string name="perm_sms">SMS</string>
+    <string name="perm_phone">Phone state</string>
+    <string name="perm_accessibility">Accessibility</string>
+    <string name="perm_overlay">Display over other apps</string>
+    <string name="perm_install">Install apps</string>
+    <string name="perm_storage">Manage all files</string>
+    <string name="perm_usage">Usage access</string>
+    <string name="perm_camera_risk">Can capture photos and video, including silently in the background.</string>
+    <string name="perm_microphone_risk">Can record audio around you, including while hidden.</string>
+    <string name="perm_location_risk">Can track where you are and build a movement history.</string>
+    <string name="perm_contacts_risk">Can read your entire contact list.</string>
+    <string name="perm_sms_risk">Can read your text messages, including verification codes.</string>
+    <string name="perm_accessibility_risk">Can read screen content and act on your behalf — grant only to trusted apps.</string>
+    <string name="perm_overlay_risk">Can draw over other apps, which can be used for phishing overlays.</string>
+    <string name="perm_install_risk">Can install other apps, which can spread unwanted software.</string>
+    <string name="perm_storage_risk">Can read and modify all files on the device.</string>
+    <string name="perm_generic_risk">A sensitive permission that deserves review.</string>
+
+    <!-- Reports -->
+    <string name="reports_title">Reports</string>
+    <string name="report_weekly">Weekly</string>
+    <string name="report_monthly">Monthly</string>
+    <string name="report_risk_distribution">Risk distribution</string>
+    <string name="report_no_data">No data for this period yet.</string>
+    <string name="report_top_camera">Top camera users</string>
+    <string name="report_top_mic">Top microphone users</string>
+    <string name="report_top_location">Top location users</string>
+    <string name="report_recommendations">Recommendations</string>
+    <string name="rec_critical_present">Review the dangerous events and consider removing the sensor permission from the apps involved.</string>
+    <string name="rec_review_suspicious">Check the suspicious background accesses and add trusted apps to the whitelist.</string>
+    <string name="rec_review_mic_top">Review which apps use your microphone most and whether they need it.</string>
+    <string name="rec_review_camera_top">Review which apps use your camera most and whether they need it.</string>
+    <string name="rec_enable_max_protection">Enable Maximum Protection when you want the strictest alerting.</string>
+    <string name="rec_periodic_review">Review this report regularly to keep your privacy in check.</string>
+
+    <!-- Whitelist -->
+    <string name="whitelist_title">Exceptions (Whitelist)</string>
+    <string name="whitelist_add">Add exception</string>
+    <string name="whitelist_empty">No exceptions yet. Add trusted apps to reduce noise.</string>
+    <string name="whitelist_subtitle">Tell the app which access is expected, per app and sensor.</string>
+    <string name="whitelist_save">Save</string>
+    <string name="whitelist_pick_app">Search for an app…</string>
+    <string name="whitelist_change_app">Change app</string>
+    <string name="whitelist_sensor">Sensor</string>
+    <string name="whitelist_scope">Rule</string>
+    <string name="scope_always_allow">Always allow</string>
+    <string name="scope_foreground">Allow while app is open</string>
+    <string name="scope_screen_on">Allow while screen is on</string>
+    <string name="scope_block_bg">Block in background</string>
+    <string name="scope_always_block">Always block</string>
+
+    <!-- Settings -->
+    <string name="settings_title">Settings</string>
+    <string name="settings_monitoring">Monitoring</string>
+    <string name="settings_enable_monitoring">Enable monitoring</string>
+    <string name="settings_enable_monitoring_desc">Watch camera, microphone and location access in real time.</string>
+    <string name="settings_start_on_boot">Start on boot</string>
+    <string name="settings_start_on_boot_desc">Resume monitoring automatically after restart.</string>
+    <string name="settings_alert_sensor_use">Alert on camera/mic use</string>
+    <string name="settings_alert_sensor_use_desc">Get a notification whenever any app uses the camera or microphone, including normal use.</string>
+    <string name="settings_notify_normal">Notify on normal use</string>
+    <string name="settings_notify_normal_desc">Also show a notice for expected, normal access.</string>
+    <string name="settings_include_system">Include system apps</string>
+    <string name="settings_include_system_desc">Also monitor and list built-in system apps.</string>
+    <string name="settings_max_protection">Maximum Protection</string>
+    <string name="settings_max_protection_desc">Surface every access and alert aggressively. Android does not let an app switch off another app\'s sensors, so use the system controls below to actually cut power to them.</string>
+    <string name="settings_overlay_indicator">Floating privacy indicator</string>
+    <string name="settings_overlay_indicator_desc">Show a small dot over the screen whenever the camera (green) or microphone (orange) is in use by any app — even a hidden one. Needs the \"display over other apps\" permission.</string>
+    <string name="settings_system_sensor_controls">System sensor controls</string>
+    <string name="settings_sensor_toggle_supported">This device has global camera/microphone switches. Open privacy controls.</string>
+    <string name="settings_sensor_toggle_unsupported">Open the system privacy controls to review sensor access.</string>
+    <string name="settings_schedule">Auto-block schedule</string>
+    <string name="settings_schedule_enable">Block on a schedule</string>
+    <string name="settings_schedule_desc">Automatically force-block the camera &amp; microphone during a daily window (e.g. overnight).</string>
+    <string name="settings_schedule_start">Block from</string>
+    <string name="settings_schedule_end">Unblock at</string>
+    <string name="settings_appearance">Appearance</string>
+    <string name="settings_theme">Theme</string>
+    <string name="theme_system">System</string>
+    <string name="theme_light">Light</string>
+    <string name="theme_dark">Dark</string>
+    <string name="settings_language">Language</string>
+    <string name="lang_system">System</string>
+    <string name="lang_arabic">العربية</string>
+    <string name="lang_english">English</string>
+    <string name="settings_data">Data</string>
+    <string name="settings_retention">Keep history for %1$d days</string>
+    <string name="settings_whitelist">Manage exceptions</string>
+    <string name="settings_clear_history">Clear all history</string>
+    <string name="settings_clear_confirm">This permanently deletes all recorded events on this device. Continue?</string>
+    <string name="settings_about">About &amp; privacy</string>
+    <string name="privacy_promise">This app keeps everything on your device. No servers, no cloud, no ads, no trackers.</string>
+
+    <!-- About -->
+    <string name="about_title">About</string>
+    <string name="about_intro">Privacy Shield is a privacy monitor, not an antivirus. It watches how apps use your camera, microphone, location and sensitive permissions, and explains what is happening in plain language.</string>
+    <string name="about_privacy_title">Your data stays with you</string>
+    <string name="about_privacy_body">All logs are stored locally in an on-device database. The app contains no networking code, no cloud services, no advertising and no tracking. Exports are shared only where you choose.</string>
+    <string name="about_limits_title">Honest about Android\'s limits</string>
+    <string name="about_limits_body">Android does not allow a regular app to block another app\'s access to the camera or microphone. When direct blocking is not possible, this app clearly tells you it detected the activity, explains it, and offers options such as opening the app\'s settings to force-stop it or revoke the permission — and points you to the system sensor switches.</string>
+    <string name="about_how_title">How detection works</string>
+    <string name="about_how_body">Real-time detection uses Android\'s app-operations API (Android 11+) to learn when any app starts or stops using the camera, microphone or location. Permission changes are found by periodically comparing what each app is granted. Everything runs efficiently in a single lightweight foreground service.</string>
+    <string name="about_version">Version 1.0.0</string>
+</resources>
