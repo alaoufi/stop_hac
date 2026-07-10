@@ -20,7 +20,6 @@ import androidx.navigation.compose.rememberNavController
 import com.privacyshield.monitor.di.AppContainer
 import com.privacyshield.monitor.ui.dashboard.DashboardScreen
 import com.privacyshield.monitor.ui.events.EventsScreen
-import com.privacyshield.monitor.ui.intruder.IntruderScreen
 import com.privacyshield.monitor.ui.navigation.Routes
 import com.privacyshield.monitor.ui.navigation.TopDestination
 import com.privacyshield.monitor.ui.settings.SettingsScreen
@@ -80,7 +79,6 @@ fun PrivacyShieldApp(container: AppContainer, factory: ViewModelProvider.Factory
                     vm = viewModel(factory),
                     onOpenWhitelist = { navController.navigate(Routes.WHITELIST) },
                     onOpenAbout = { navController.navigate(Routes.ABOUT) },
-                    onOpenIntruders = { navController.navigate(Routes.INTRUDERS) },
                 )
             }
             composable(Routes.WHITELIST) {
@@ -88,9 +86,6 @@ fun PrivacyShieldApp(container: AppContainer, factory: ViewModelProvider.Factory
             }
             composable(Routes.ABOUT) {
                 AboutScreen(onBack = { navController.popBackStack() })
-            }
-            composable(Routes.INTRUDERS) {
-                IntruderScreen(onBack = { navController.popBackStack() })
             }
         }
     }

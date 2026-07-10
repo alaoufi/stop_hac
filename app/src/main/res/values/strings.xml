@@ -90,6 +90,7 @@
     <string name="block_msg_mic_toggle">Opening the system toggle for the microphone.</string>
     <string name="dashboard_block_open_system">Opened the system sensor switch — turn it on to enforce.</string>
     <string name="dashboard_block_failed">Could not enforce: %1$s</string>
+    <string name="admin_camera_explanation">Activate to let Privacy Shield cut the camera for all apps on your command. You can turn this off any time.</string>
     <string name="dashboard_block_locked_note">🔒 Unlocking requires your fingerprint or PIN.</string>
     <string name="dashboard_panic">🚨 Panic — lock everything down</string>
     <string name="dashboard_panic_done">Lockdown on: sensors force-blocked and alerts maxed.</string>

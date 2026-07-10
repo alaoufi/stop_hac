@@ -15,7 +15,6 @@ import com.privacyshield.monitor.core.model.UserDecision
 import com.privacyshield.monitor.di.AppContainer
 import com.privacyshield.monitor.notify.Notifier
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import java.util.concurrent.Executors
@@ -37,8 +36,6 @@ class MonitorService : LifecycleService() {
     private lateinit var deviceState: DeviceState
     private val analyzer = RiskAnalyzer()
     private val callbackExecutor = Executors.newSingleThreadExecutor()
-    private lateinit var overlay: OverlayIndicator
-    private var installReceiver: InstallReceiver? = null
 
     /** Last time a "start" was handled per (sensor:package), for flap coalescing. */
     private val lastStartHandled = java.util.concurrent.ConcurrentHashMap<String, Long>()
@@ -49,38 +46,11 @@ class MonitorService : LifecycleService() {
         notifier = Notifier(this)
         detector = SensorAccessMonitor(this)
         deviceState = DeviceState(this)
-        overlay = OverlayIndicator(this)
-        observeOverlay()
-        registerInstallReceiver()
-    }
 
-    /** Watches for newly installed / removed apps while the service is alive. */
-    private fun registerInstallReceiver() {
-        val receiver = InstallReceiver()
-        val filter = android.content.IntentFilter().apply {
-            addAction(Intent.ACTION_PACKAGE_ADDED)
-            addAction(Intent.ACTION_PACKAGE_REMOVED)
-            addDataScheme("package")
-        }
-        androidx.core.content.ContextCompat.registerReceiver(
-            this, receiver, filter,
-            androidx.core.content.ContextCompat.RECEIVER_EXPORTED,
-        )
-        installReceiver = receiver
-    }
-
-    /** Drives the floating privacy dot from live sensor state + the user's toggle. */
-    private fun observeOverlay() {
-        lifecycleScope.launch {
-            combine(
-                MonitorState.active,
-                container.settings.settings,
-            ) { active, settings ->
-                if (!settings.overlayIndicatorEnabled) emptySet()
-                else active.values.map { it.sensor }
-                    .filter { it == SensorType.CAMERA || it == SensorType.MICROPHONE }
-                    .toSet()
-            }.collect { sensors -> overlay.update(sensors) }
+        // Cheap one-time trim of old log entries so the DB never grows unbounded.
+        lifecycleScope.launch(Dispatchers.IO) {
+            val settings = container.settings.settings.first()
+            container.eventRepository.applyRetention(settings.retentionDays, System.currentTimeMillis())
         }
     }
 
@@ -262,7 +232,6 @@ class MonitorService : LifecycleService() {
 
     private fun stopEverything() {
         detector.stop()
-        overlay.hide()
         MonitorState.setRunning(false)
         MonitorState.reset()
         stopForeground(STOP_FOREGROUND_REMOVE)
@@ -271,9 +240,6 @@ class MonitorService : LifecycleService() {
 
     override fun onDestroy() {
         detector.stop()
-        overlay.hide()
-        installReceiver?.let { runCatching { unregisterReceiver(it) } }
-        installReceiver = null
         callbackExecutor.shutdown()
         MonitorState.setRunning(false)
         super.onDestroy()

@@ -7,22 +7,19 @@ import com.privacyshield.monitor.data.prefs.AppLanguage
 import com.privacyshield.monitor.data.prefs.AppSettings
 import com.privacyshield.monitor.data.prefs.ThemeMode
 import com.privacyshield.monitor.di.AppContainer
-import com.privacyshield.monitor.monitor.MaxProtectionController
 import com.privacyshield.monitor.monitor.MonitorService
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
+/**
+ * Settings for the focused camera/microphone monitor — only what the core needs.
+ */
 class SettingsViewModel(private val container: AppContainer) : ViewModel() {
 
     val settings: StateFlow<AppSettings> = container.settings.settings
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), AppSettings())
-
-    private val maxProtection = MaxProtectionController(container.appContext)
-
-    fun deviceSupportsSensorToggle(): Boolean = maxProtection.deviceSupportsSensorToggle()
-    fun sensorControlsIntent() = maxProtection.sensorControlsIntent()
 
     fun setMonitoring(enabled: Boolean) = viewModelScope.launch {
         container.settings.setMonitoring(enabled)
@@ -33,81 +30,8 @@ class SettingsViewModel(private val container: AppContainer) : ViewModel() {
     fun setStartOnBoot(enabled: Boolean) =
         viewModelScope.launch { container.settings.setStartOnBoot(enabled) }
 
-    fun setMaxProtection(enabled: Boolean) = viewModelScope.launch {
-        container.settings.setMaxProtection(enabled)
-        // Max protection surfaces every access, so also enable normal alerts.
-        container.settings.setNotifyNormal(enabled)
-    }
-
-    fun setNotifyNormal(enabled: Boolean) =
-        viewModelScope.launch { container.settings.setNotifyNormal(enabled) }
-
     fun setAlertOnSensorUse(enabled: Boolean) =
         viewModelScope.launch { container.settings.setAlertOnSensorUse(enabled) }
-
-    fun setOverlayIndicator(enabled: Boolean) =
-        viewModelScope.launch { container.settings.setOverlayIndicator(enabled) }
-
-    fun setBlockLock(enabled: Boolean) =
-        viewModelScope.launch { container.settings.setBlockLock(enabled) }
-
-    fun setAppLock(enabled: Boolean) =
-        viewModelScope.launch { container.settings.setAppLock(enabled) }
-
-    fun setIntruderPhoto(enabled: Boolean) =
-        viewModelScope.launch { container.settings.setIntruderPhoto(enabled) }
-
-    fun hasCameraPermission(): Boolean =
-        com.privacyshield.monitor.monitor.IntruderCapture.hasCameraPermission(container.appContext)
-
-    // ---- Tamper protection (device admin) ----
-    private val dpm = container.appContext
-        .getSystemService(android.content.Context.DEVICE_POLICY_SERVICE)
-        as android.app.admin.DevicePolicyManager
-
-    fun isTamperProtectionActive(): Boolean =
-        dpm.isAdminActive(com.privacyshield.monitor.monitor.TamperAdminReceiver.component(container.appContext))
-
-    fun enableTamperProtectionIntent(): android.content.Intent =
-        android.content.Intent(android.app.admin.DevicePolicyManager.ACTION_ADD_DEVICE_ADMIN).apply {
-            putExtra(
-                android.app.admin.DevicePolicyManager.EXTRA_DEVICE_ADMIN,
-                com.privacyshield.monitor.monitor.TamperAdminReceiver.component(container.appContext),
-            )
-            putExtra(
-                android.app.admin.DevicePolicyManager.EXTRA_ADD_EXPLANATION,
-                container.appContext.getString(com.privacyshield.monitor.R.string.tamper_explanation),
-            )
-        }
-
-    fun disableTamperProtection() {
-        runCatching {
-            dpm.removeActiveAdmin(
-                com.privacyshield.monitor.monitor.TamperAdminReceiver.component(container.appContext),
-            )
-        }
-    }
-
-    private val scheduler = com.privacyshield.monitor.monitor.BlockScheduler(container.appContext)
-
-    /** Persists the auto-block schedule and (re)arms or cancels the alarms. */
-    fun setSchedule(enabled: Boolean, startMinutes: Int, endMinutes: Int) {
-        viewModelScope.launch {
-            container.settings.setSchedule(enabled, startMinutes, endMinutes)
-            if (enabled) scheduler.schedule(startMinutes, endMinutes) else scheduler.cancel()
-        }
-    }
-
-    fun canAuthenticate(): Boolean =
-        com.privacyshield.monitor.ui.BiometricGate.canAuthenticate(container.appContext)
-
-    /** True when the "display over other apps" permission is already granted. */
-    fun canDrawOverlay(): Boolean = android.provider.Settings.canDrawOverlays(container.appContext)
-
-    fun overlayPermissionIntent() = android.content.Intent(
-        android.provider.Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
-        android.net.Uri.parse("package:${container.appContext.packageName}"),
-    ).addFlags(android.content.Intent.FLAG_ACTIVITY_NEW_TASK)
 
     fun setIncludeSystemApps(enabled: Boolean) =
         viewModelScope.launch { container.settings.setIncludeSystemApps(enabled) }

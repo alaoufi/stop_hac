@@ -90,6 +90,7 @@
     <string name="block_msg_mic_toggle">جارٍ فتح مفتاح النظام للميكروفون.</string>
     <string name="dashboard_block_open_system">فُتح مفتاح مستشعرات النظام — فعّله لفرض الحظر.</string>
     <string name="dashboard_block_failed">تعذّر الفرض: %1$s</string>
+    <string name="admin_camera_explanation">فعّلها ليتمكّن درع الخصوصية من قطع الكاميرا عن كل التطبيقات بأمرك. يمكنك إيقافها في أي وقت.</string>
     <string name="dashboard_block_locked_note">🔒 فكّ الحظر يتطلب بصمتك أو رقمك السري.</string>
     <string name="dashboard_panic">🚨 الطوارئ — أغلق كل شيء</string>
     <string name="dashboard_panic_done">تم الإغلاق: حظر قصري للمستشعرات وأقصى تنبيه.</string>

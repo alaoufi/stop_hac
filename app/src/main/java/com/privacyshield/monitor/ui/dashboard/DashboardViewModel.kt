@@ -2,6 +2,7 @@ package com.privacyshield.monitor.ui.dashboard
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.privacyshield.monitor.R
 import com.privacyshield.monitor.core.model.RiskLevel
 import com.privacyshield.monitor.core.model.SecurityEvent
 import com.privacyshield.monitor.data.prefs.AppSettings
@@ -64,17 +65,15 @@ class DashboardViewModel(private val container: AppContainer) : ViewModel() {
         }
     }
 
-    /**
-     * Panic: instant maximum lockdown. Turns on the forced sensor block and
-     * maximum-protection alerting in one tap, then reports how the sensor block
-     * was enforced (root vs system toggle).
-     */
-    fun panic(onResult: (com.privacyshield.monitor.monitor.ForceBlockController.Result) -> Unit) {
-        viewModelScope.launch {
-            container.settings.setMaxProtection(true)
-            container.settings.setNotifyNormal(true)
-            container.settings.setForceBlock(true)
-            onResult(forceBlock.block())
+    /** Intent to activate device admin so the app can actually cut the camera. */
+    fun deviceAdminEnableIntent(): android.content.Intent {
+        val admin = com.privacyshield.monitor.monitor.TamperAdminReceiver.component(container.appContext)
+        return android.content.Intent(android.app.admin.DevicePolicyManager.ACTION_ADD_DEVICE_ADMIN).apply {
+            putExtra(android.app.admin.DevicePolicyManager.EXTRA_DEVICE_ADMIN, admin)
+            putExtra(
+                android.app.admin.DevicePolicyManager.EXTRA_ADD_EXPLANATION,
+                container.appContext.getString(R.string.admin_camera_explanation),
+            )
         }
     }
 

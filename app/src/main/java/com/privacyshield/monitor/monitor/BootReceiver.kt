@@ -10,8 +10,8 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
 /**
- * Restarts monitoring after a reboot, but only if the user opted in
- * (start-on-boot) and monitoring was enabled. Also arms the periodic scan.
+ * Restarts camera/microphone monitoring after a reboot, only if the user opted
+ * in (start-on-boot) and monitoring was enabled.
  */
 class BootReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
@@ -27,16 +27,6 @@ class BootReceiver : BroadcastReceiver() {
                 if (settings.startOnBoot && settings.monitoringEnabled) {
                     MonitorService.start(context)
                 }
-                if (settings.scheduleEnabled) {
-                    BlockScheduler(context).schedule(
-                        settings.scheduleStartMinutes,
-                        settings.scheduleEndMinutes,
-                    )
-                }
-                if (settings.firewallEnabled) {
-                    FirewallVpnService.start(context)
-                }
-                PeriodicScanWorker.schedule(context)
             } finally {
                 pending.finish()
             }

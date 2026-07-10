@@ -2,35 +2,25 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <!-- Hard guarantee of the no-network promise: even if a future dependency
-         tries to merge in INTERNET, the build strips it. The app cannot open
-         a network socket, ever. -->
+    <!-- Hard guarantee of the no-network promise: even if a dependency tries to
+         merge in INTERNET, the build strips it. The app cannot open a socket. -->
     <uses-permission
         android:name="android.permission.INTERNET"
         tools:node="remove" />
 
-    <!-- Keep the monitoring service alive in the background. -->
+    <!-- Keep the lightweight monitoring service alive. -->
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_SPECIAL_USE" />
-    <!-- Post the privacy alerts that are the app's primary output (Android 13+). -->
+    <!-- Post the camera/microphone alerts that are the app's only output. -->
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
-    <!-- Restart monitoring after reboot, only if the user opted in. -->
+    <!-- Resume monitoring after reboot, only if the user opted in. -->
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
-    <!-- Determine whether the accessing app is in the foreground. Special access,
-         granted by the user in Settings; the app works without it (degraded). -->
+    <!-- Tell whether the app using the camera/mic is foreground or hidden. -->
     <uses-permission android:name="android.permission.PACKAGE_USAGE_STATS"
         tools:ignore="ProtectedPermissions" />
-    <!-- Enumerate installed apps to resolve names/icons and scan permissions.
-         Core to a device-wide privacy monitor's purpose. -->
+    <!-- Resolve package names to app labels/icons for the alerts and log. -->
     <uses-permission android:name="android.permission.QUERY_ALL_PACKAGES"
         tools:ignore="QueryAllPackagesPermission" />
-    <!-- Optional floating privacy indicator (the dot shown while cam/mic is in
-         use). Off until the user enables it and grants the permission. -->
-    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
-    <!-- Optional intruder-selfie: only used to photograph whoever fails to unlock
-         the app. Off by default; the user grants it explicitly. -->
-    <uses-permission android:name="android.permission.CAMERA" />
-    <uses-feature android:name="android.hardware.camera.any" android:required="false" />
 
     <application
         android:name=".PrivacyMonitorApp"
@@ -73,29 +63,8 @@
                 android:value="privacy_sensor_monitoring" />
         </service>
 
-        <!-- Local, no-root per-app internet firewall. It only DROPS the traffic
-             of blocked apps and never opens an outbound socket, so it needs no
-             INTERNET permission and cannot leak data. -->
-        <service
-            android:name=".monitor.FirewallVpnService"
-            android:exported="false"
-            android:permission="android.permission.BIND_VPN_SERVICE"
-            android:foregroundServiceType="specialUse">
-            <property
-                android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE"
-                android:value="privacy_firewall" />
-            <intent-filter>
-                <action android:name="android.net.VpnService" />
-            </intent-filter>
-        </service>
-
-        <receiver
-            android:name=".monitor.ScheduleReceiver"
-            android:exported="false" />
-
-        <!-- Optional tamper protection: being a device admin blocks uninstall
-             until the user removes admin (which shows our warning). Off by
-             default; the user enables it explicitly. -->
+        <!-- Device admin — used only to actually cut the camera on the user's
+             command (setCameraDisabled). Off until the user activates it. -->
         <receiver
             android:name=".monitor.TamperAdminReceiver"
             android:permission="android.permission.BIND_DEVICE_ADMIN"
